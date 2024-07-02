@@ -1,0 +1,15 @@
+export const GenerateText = [
+  'a chin-su bottle with a hole in the bottom',
+  'a small, round, wooden box',
+  'a mirror with a crack in it',
+  'a teapot with a chip in the spout',
+  'a broken sword',
+  'a cracked crystal ball',
+  'a torn page from a spellbook',
+  'a small, broken hourglass',
+  'a small, broken music box',
+  'a broken spyglass',
+  'a broken compass',
+  'a broken lantern',
+  'a shoe with a hole in the sole',
+]
