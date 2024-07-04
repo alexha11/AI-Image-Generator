@@ -15,6 +15,12 @@ const CreatePost = () => {
   const [generatingText, setGeneratingText] = useState(true);
   const [loading, setLoading] = useState(false);
 
+  const generateImage = async () => {
+    setGeneratingText(true);
+    const prompt = await getRandomPrompt();
+    setForm({ ...form, prompt });
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -55,13 +61,26 @@ const CreatePost = () => {
             isGenerating={generatingText}
             handleGenerating={handleGenerateText}
           />
-        <div className="relative bg-gray-50 border border-gray-300 text-gray-900 text-sm  rounded-lg focus:ring-blue-500 focus:border-blue-500 w-64 p-3 h-64 flex justify-center items-center">
-          {form.photo ? (
-            <img src={form.photo} alt={form.prompt} className="w-full h-full object-contain" />
-          ) : (
-            <img src={preview} alt='preview' className="w-9/12 h-9/12 object-contain opacity-40" />
+          <div className="relative bg-gray-50 border border-gray-300 text-gray-900 text-sm  rounded-lg focus:ring-blue-500 focus:border-blue-500 w-64 p-3 h-64 flex justify-center items-center">
+            {form.photo ? (
+              <img src={form.photo} alt={form.prompt} className="w-full h-full object-contain" />
+            ) : (
+              <img src={preview} alt='preview' className="w-9/12 h-9/12 object-contain opacity-40" />
+              )}
+            {generatingText && (
+              <div className='absolute inset-0 z-0 flex justify-center items-center bg-[rgba(0,0,0,0.5)] rounded-lg '>
+                <Loader/>
+              </div>
             )}
           </div>
+        </div>
+        <div className='mt-5 flex gap-5'> 
+            <button
+            type='button'
+            onClick={generateImage}
+            >
+              {generatingText ? 'Generating...' : 'Generate'}
+            </button>
         </div>
       </form>
     </section>
