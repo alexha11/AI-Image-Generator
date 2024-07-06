@@ -36,9 +36,9 @@ const CreatePost = () => {
     setForm({ ...form, [name]: value });
   }
 
-  const handleGenerateText = async () => {
+  const handleGenerateText =  () => {
     setGeneratingText(true);
-    const prompt = await getRandomPrompt();
+    const prompt =  getRandomPrompt();
     setForm({ ...form, prompt });
     setGeneratingText(false);
   }
@@ -78,10 +78,21 @@ const CreatePost = () => {
             <button
             type='button'
             onClick={generateImage}
+            className='text-white bg-green-700 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center'
             >
               {generatingText ? 'Generating...' : 'Generate'}
             </button>
         </div>
+        <div className='mt-10'>
+          <p className='mt-2 text-[#666e75] text-[14px]'>Once you have created the image you want, you can share it to the community</p>
+          <button
+            type='submit'
+            className='text-white bg-[#6469ff] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center mt-5'>
+              {loading ? 'Sharing...' : 'Share with the community'}
+            </button>
+        </div>
+        
+        
       </form>
     </section>
   );
