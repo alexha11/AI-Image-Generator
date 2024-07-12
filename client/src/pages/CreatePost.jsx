@@ -17,7 +17,7 @@ const CreatePost = () => {
 
   const generateImage = async () => {
     setGeneratingText(true);
-    const prompt = await getRandomPrompt();
+    const prompt = getRandomPrompt();
     setForm({ ...form, prompt });
   }
 
@@ -25,8 +25,7 @@ const CreatePost = () => {
     e.preventDefault();
     setLoading(true);
 
-    // Call the API to generate the image
-    // await generateImage(form);
+  
     setLoading(false);
     navigate('/');
   }
@@ -37,10 +36,8 @@ const CreatePost = () => {
   }
 
   const handleGenerateText =  () => {
-    setGeneratingText(true);
-    const prompt =  getRandomPrompt();
-    setForm({ ...form, prompt });
-    setGeneratingText(false);
+    const randomPrompt =  getRandomPrompt(form.prompt);
+    setForm({ ...form, prompt: randomPrompt });
   }
 
   return (
@@ -52,11 +49,20 @@ const CreatePost = () => {
       <form className='mt-16 max-w-3xl' onSubmit={handleSubmit}>
         <div className='flex flex-col gap-5'>
           <FormField
-            LabelName='Your name'
+              LabelName='Your name'
+              type='text'
+              name='name'
+              placeholder='Ex., Duong'
+              value={form.name}
+              handleChange={handleChange}
+              />
+
+          <FormField
+            LabelName='Prompt'
             type='text'
             name='name'
             placeholder='Enter your name'
-            value={form.name}
+            value={form.prompt}
             handleChange={handleChange}
             isGenerating={generatingText}
             handleGenerating={handleGenerateText}
