@@ -1,6 +1,6 @@
 import { preview } from '../assets';
 
-const FormField = ( {LabelName, type, name, placeholder, value, handleChange, isGenerating, handleGenerating} ) => {
+const FormField = ( {LabelName, type, name, placeholder, value, handleChange, isSupriseMe, handleGenerating} ) => {
   return (
    <div>
     <div className="flex items-center gap-2 mb-2">
@@ -8,7 +8,7 @@ const FormField = ( {LabelName, type, name, placeholder, value, handleChange, is
          className="block text-sm font-medium text-gray-900">
         {LabelName}
       </label>
-      {isGenerating && (
+      {isSupriseMe && (
         <button
           type='button'
           onClick={handleGenerating}

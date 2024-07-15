@@ -12,13 +12,34 @@ const CreatePost = () => {
     photo: '',
   });
 
-  const [generatingText, setGeneratingText] = useState(true);
+  const [generatingText, setGeneratingText] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const generateImage = async () => {
-    setGeneratingText(true);
-    const prompt = getRandomPrompt();
-    setForm({ ...form, prompt });
+    if (form.prompt) {
+      try {
+        setGeneratingText(true);
+        const response = await fetch('http://localhost:8080/api/v1/dalle', {
+        
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ prompt: form.prompt}),
+        });
+        const data = await response.json();
+        console.log(data);
+        setForm({ ...form, photo:  'data:image/jpeg;base64,' + data.photo });
+        setGeneratingText(false);
+      } catch (error) {
+        console.log(error);
+    }
+    finally {
+      setGeneratingText(false);
+    }
+    } else {
+      alert('Please enter a prompt');
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -30,10 +51,8 @@ const CreatePost = () => {
     navigate('/');
   }
 
-  const handleChange = (e) => { 
-    const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
-  }
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
 
   const handleGenerateText =  () => {
     const randomPrompt =  getRandomPrompt(form.prompt);
@@ -60,11 +79,11 @@ const CreatePost = () => {
           <FormField
             LabelName='Prompt'
             type='text'
-            name='name'
+            name='prompt'
             placeholder='Enter your name'
             value={form.prompt}
             handleChange={handleChange}
-            isGenerating={generatingText}
+            isSupriseMe={true}
             handleGenerating={handleGenerateText}
           />
           <div className="relative bg-gray-50 border border-gray-300 text-gray-900 text-sm  rounded-lg focus:ring-blue-500 focus:border-blue-500 w-64 p-3 h-64 flex justify-center items-center">
