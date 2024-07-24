@@ -20,10 +20,10 @@ const CreatePost = () => {
       try {
         setGeneratingText(true);
         const response = await fetch('http://localhost:8080/api/v1/dalle', {
-        
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'access-control-allow-origin': '*',
           },
           body: JSON.stringify({ prompt: form.prompt}),
         });
@@ -114,7 +114,7 @@ const CreatePost = () => {
             type='submit'
             className='text-white bg-[#6469ff] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center mt-5'>
               {loading ? 'Sharing...' : 'Share with the community'}
-            </button>
+          </button>
         </div>
         
         

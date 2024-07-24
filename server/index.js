@@ -9,11 +9,8 @@ import dalleRoutes from './routes/dalleRoutes.js';
 dotenv.config(); 
 
 const app = express();
-var corsOptions = {
-  origin: "http://localhost:5173"
-};
 
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 
 app.use('/api/v1/post', postRoutes);
@@ -28,7 +25,7 @@ const startServer = () => {
     connectDB(process.env.MONGODB_URL);
     console.log('Connected to MongoDB');
 
-    const port = 8080;
+    const port = process.env.PORT;
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
