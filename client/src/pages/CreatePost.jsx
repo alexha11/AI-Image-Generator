@@ -9,7 +9,7 @@ const CreatePost = () => {
   const [form, setForm] = useState({
     name: '',
     prompt: '',
-    photo: '',
+    photo: 'https://commondatastorage.googleapis.com/codeskulptor-assets/lathrop/asteroid_blue.png',
   });
 
   const [generatingText, setGeneratingText] = useState(false);
@@ -44,11 +44,30 @@ const CreatePost = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
 
-  
-    setLoading(false);
-    navigate('/');
+    if (form.prompt && form.photo) {
+      try {
+        setLoading(true);
+        const response = await fetch('http://localhost:8080/api/v1/post', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'access-control-allow-origin': '*',
+          },
+          body: JSON.stringify(form),
+        });
+        const data = await response.json();
+        console.log(data);
+        navigate('/');
+
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      alert('Please enter a prompt and generate an image');
+    }
   }
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });

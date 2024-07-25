@@ -7,8 +7,30 @@ const Home = () => {
 
   const [searchText, setSearchText] = useState('');
 
+  useEffect( () => {
+    setLoading(true);
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/v1/post', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'access-control-allow-origin': '*',
+          },
+        });
+        const data = await response.json();
+        setPosts(data.data.reverse());
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+      }
+    }
+    fetchPosts();
+  }, []);
+
   const RenderCards = ({ data, title }) => {
-    if (data?.length > 0) return data.map(post => <Card key={post.id} post={post} />)
+    if (data?.length > 0) return data.map(post => <Card key={post.id} {...post} />)
     return (
       <h2 className="mt-5 font-bold text-[#6449ff] text-xl uppercase">No results found for <span className="text-[#222328]">{title}</span></h2>
     )  
