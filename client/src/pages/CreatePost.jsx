@@ -9,7 +9,7 @@ const CreatePost = () => {
   const [form, setForm] = useState({
     name: '',
     prompt: '',
-    photo: 'https://commondatastorage.googleapis.com/codeskulptor-assets/lathrop/asteroid_blue.png',
+    photo: '',
   });
 
   const [generatingText, setGeneratingText] = useState(false);
@@ -99,7 +99,7 @@ const CreatePost = () => {
             LabelName='Prompt'
             type='text'
             name='prompt'
-            placeholder='Enter your name'
+            placeholder='Enter your prompt'
             value={form.prompt}
             handleChange={handleChange}
             isSupriseMe={true}

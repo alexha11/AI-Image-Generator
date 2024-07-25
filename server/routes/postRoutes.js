@@ -23,8 +23,8 @@ router.route('/').get(async (req, res) => {
 
     res.status(200).json({ success: true, data: posts });
 
-  } catch {
-    res.status(500).json({ success: false, message: error.message });
+  } catch (error) {
+    res.status(500).json({ success: false, data: error});
     console.error(error);
   }
 })
@@ -41,8 +41,7 @@ router.route('/').post(async (req, res) => {
     });
     res.status(201).json({ success: true, data: newPost });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-    console.error(error);
+    res.status(500).json({ success: false, data: error});
   }
 })
 
