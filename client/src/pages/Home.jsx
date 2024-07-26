@@ -12,11 +12,10 @@ const Home = () => {
     setLoading(true);
     const fetchPosts = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/v1/post', {
+        const response = await fetch('https://ai-image-generator-f5m8.onrender.com/api/v1/post', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'access-control-allow-origin': '*',
           },
         });
         const data = await response.json();

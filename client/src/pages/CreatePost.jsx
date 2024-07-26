@@ -19,11 +19,10 @@ const CreatePost = () => {
     if (form.prompt) {
       try {
         setGeneratingText(true);
-        const response = await fetch('http://localhost:8080/api/v1/dalle', {
+        const response = await fetch('https://ai-image-generator-f5m8.onrender.com/api/v1/dalle', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'access-control-allow-origin': '*',
           },
           body: JSON.stringify({ prompt: form.prompt}),
         });
@@ -48,11 +47,10 @@ const CreatePost = () => {
     if (form.prompt && form.photo) {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:8080/api/v1/post', {
+        const response = await fetch('https://ai-image-generator-f5m8.onrender.com/api/v1/post', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'access-control-allow-origin': '*',
           },
           body: JSON.stringify(form),
         });
