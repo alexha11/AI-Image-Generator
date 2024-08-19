@@ -10,10 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "env": "^0.0.2",
     "file-saver": "^2.0.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.24.0"
+    "react-router-dom": "^6.24.0",
+    "react-toastify": "^10.0.5"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
@@ -24,7 +26,7 @@
     "eslint-plugin-react": "^7.34.2",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
-    "postcss": "^8.4.39",
+    "postcss": "^8.4.41",
     "tailwindcss": "^3.4.4",
     "vite": "^5.3.1"
   }

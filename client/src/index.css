@@ -7,3 +7,21 @@
 :root {
   font-family: 'Inter', sans-serif;
 } 
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  background: linear-gradient(270deg, #ff6b6b, #f7d794, #6c5ce7, #74b9ff);
+  background-size: 600% 600%;
+  animation: gradient 8s ease infinite;
+}
