@@ -4,6 +4,9 @@ import { preview } from '../assets';
 import { getRandomPrompt } from '../utils';
 import { FormField, Loader } from '../components';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const CreatePost = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -14,10 +17,44 @@ const CreatePost = () => {
 
   const [generatingText, setGeneratingText] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [count, setCount] = useState(0);
+  const [reset, setReset] = useState(false);
+  const [password, setPassword] = useState('');
 
+  const succesNoti = ({text}) => {
+    toast.success(text, {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      theme: 'colored',
+      progress: undefined,
+    });
+    return;
+  }
+
+  const errorNoti = () => {
+    toast.error('Please enter correct passworld!', {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      theme: 'colored',
+      progress: undefined,
+    });
+    return;
+  }
   const generateImage = async () => {
     if (form.prompt) {
       try {
+        if(count >= 10) {
+          alert('You have reached the limit of 10 images');
+          return;
+        }
         setGeneratingText(true);
         const response = await fetch('https://ai-image-generator-f5m8.onrender.com/api/v1/dalle', {
           method: 'POST',
@@ -30,6 +67,7 @@ const CreatePost = () => {
         console.log(data);
         setForm({ ...form, photo:  'data:image/jpeg;base64,' + data.photo });
         setGeneratingText(false);
+        setCount(count + 1);
       } catch (error) {
         console.log(error);
     }
@@ -76,6 +114,17 @@ const CreatePost = () => {
     setForm({ ...form, prompt: randomPrompt });
   }
 
+  const checkPassword = () => {
+    if(password === import.meta.env.VITE_PASSWORD) {
+      succesNoti('Usage limit resets successfully');
+      setCount(0);
+      setReset(false);
+      setPassword('');
+    } else {
+      errorNoti();
+    }
+  }
+
   return (
     <section className="max-w-7xl mx-auto">
       <div>
@@ -116,26 +165,55 @@ const CreatePost = () => {
             )}
           </div>
         </div>
-        <div className='mt-5 flex gap-5'> 
+        <div className='mt-5 flex items-center gap-5'> 
             <button
             type='button'
             onClick={generateImage}
-            className='text-white bg-green-700 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center'
+            className='text-white bg-[#5adbb5] hover:bg-[#5dbea3] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center'
             >
               {generatingText ? 'Generating...' : 'Generate'}
             </button>
+            <p className='text-[#222629] text-[14px]'>Limit per reset: {count} / 10</p>
         </div>
         <div className='mt-10'>
           <p className='mt-2 text-[#666e75] text-[14px]'>Once you have created the image you want, you can share it to the community</p>
           <button
             type='submit'
-            className='text-white bg-[#6469ff] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center mt-5'>
+            className='text-white bg-[#4681f4] hover:bg-[#5783db] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center mt-5'>
               {loading ? 'Sharing...' : 'Share with the community'}
           </button>
         </div>
         
         
       </form>
+    
+      <div className='mt-36'>
+            <h2 className='text-[#222328] text-[25px] font-semibold'>Usage Limit</h2>
+            <p className='text-[#666e75] text-[12px] inline'>Warning: Users can generate images up to 10 times. Only the admin with the password can reset the time limit. If you want to reset the usage limit click here: </p>
+            <button className='text-[#666e75] text-[14px] ml-3' onClick={() => {setReset(!reset)}}>Reset</button>
+        </div>
+        {
+          reset && (
+            <div className='mt-2'>
+              <FormField
+                LabelName='Password'
+                type='password'
+                name='password'
+                placeholder='Enter password'
+                value={password}
+                handleChange={(e) => setPassword(e.target.value)}
+              />
+              <button
+                type='button'
+                className='text-white bg-[#5adbb5] hover:bg-[#5dbea3] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center mt-5'
+                onClick={checkPassword}
+                >
+                  Reset
+              </button>
+            </div>
+          )
+        }
+      <ToastContainer />
     </section>
   );
 } 
