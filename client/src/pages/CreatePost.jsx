@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { preview } from '../assets';
 import { getRandomPrompt } from '../utils';
@@ -17,11 +17,20 @@ const CreatePost = () => {
 
   const [generatingText, setGeneratingText] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [count, setCount] = useState(0);
+
+  const [count, setCount] = useState(() => {
+    const storedCount = localStorage.getItem('count');
+    return storedCount ? parseInt(storedCount, 10) : 0;
+  });
+
   const [reset, setReset] = useState(false);
   const [password, setPassword] = useState('');
 
-  const succesNoti = ({text}) => {
+  useEffect(() => {
+    localStorage.setItem('count', count.toString());  // Store the count as a string
+  }, [count]);
+
+  const succesNoti = (text) => {
     toast.success(text, {
       position: 'top-right',
       autoClose: 5000,
@@ -68,6 +77,7 @@ const CreatePost = () => {
         setForm({ ...form, photo:  'data:image/jpeg;base64,' + data.photo });
         setGeneratingText(false);
         setCount(count + 1);
+        succesNoti('Image generated successfully');
       } catch (error) {
         console.log(error);
     }
@@ -95,6 +105,7 @@ const CreatePost = () => {
         const data = await response.json();
         console.log(data);
         navigate('/');
+        succesNoti('Image shared successfully');
 
       } catch (error) {
         console.log(error);
@@ -186,11 +197,13 @@ const CreatePost = () => {
         
         
       </form>
-    
+      
       <div className='mt-36'>
+            <div className='bg-black w-full h-[0.5px]'></div>
             <h2 className='text-[#222328] text-[25px] font-semibold'>Usage Limit</h2>
-            <p className='text-[#666e75] text-[12px] inline'>Warning: Users can generate images up to 10 times. Only the admin with the password can reset the time limit. If you want to reset the usage limit click here: </p>
+            <p className='text-[#666e75] text-[12px] inline'>Warning: Users can generate images up to 10 times. Only an admin with the password can reset this limit. If you want to reset the usage limit, click here: </p>
             <button className='text-[#666e75] text-[14px] ml-3' onClick={() => {setReset(!reset)}}>Reset</button>
+            <ToastContainer />
         </div>
         {
           reset && (
@@ -213,7 +226,7 @@ const CreatePost = () => {
             </div>
           )
         }
-      <ToastContainer />
+       
     </section>
   );
 } 
