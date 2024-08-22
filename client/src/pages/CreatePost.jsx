@@ -17,16 +17,16 @@ const CreatePost = () => {
 
   const [generatingText, setGeneratingText] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [count, setCount] = useState(null);
+  const [count, setCount] = useState(-1);
   const [reset, setReset] = useState(false);
   const [password, setPassword] = useState('');
 
+  
   useEffect(() => {
     const fetchCount = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/v1/count');
+        const response = await fetch('https://ai-image-generator-f5m8.onrender.com/api/v1/count');
         const data = await response.json();
-        console.log(data);
         setCount(data.data.count);
       } catch (error) {
         console.error('Error fetching count:', error);
@@ -36,10 +36,11 @@ const CreatePost = () => {
     fetchCount();
   }, []);
 
+
   useEffect(() => {
     const updateCount = async () => {
       try {
-        await fetch('http://localhost:8080/api/v1/count', {
+        await fetch('https://ai-image-generator-f5m8.onrender.com/api/v1/count', {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -86,8 +87,8 @@ const CreatePost = () => {
   const generateImage = async () => {
     if (form.prompt) {
       try {
-        if(count >= 10) {
-          alert('You have reached the limit of 10 images');
+        if(count >= 5) {
+          alert('You have reached the limit of 5 images');
           return;
         }
         setGeneratingText(true);
@@ -210,7 +211,7 @@ const CreatePost = () => {
             >
               {generatingText ? 'Generating...' : 'Generate'}
             </button>
-            <p className='text-[#222629] text-[14px] inline'>Limit per reset: {count ? <div className='inline'>{count} / 10</div> : <div className='inline h-6 w-6'><Loader/></div>}</p>
+            <p className='text-[#222629] text-[14px] inline'>Limit per reset: {count !== -1 ? <div>{count} / 5</div> : <p>Loading...</p>}</p>
         </div>
         <div className='mt-10'>
           <p className='mt-2 text-[#666e75] text-[14px]'>Once you have created the image you want, you can share it to the community</p>
