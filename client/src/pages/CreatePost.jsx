@@ -17,17 +17,44 @@ const CreatePost = () => {
 
   const [generatingText, setGeneratingText] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const [count, setCount] = useState(() => {
-    const storedCount = localStorage.getItem('count');
-    return storedCount ? parseInt(storedCount, 10) : 0;
-  });
-
+  const [count, setCount] = useState(-1);
   const [reset, setReset] = useState(false);
   const [password, setPassword] = useState('');
 
+  
   useEffect(() => {
-    localStorage.setItem('count', count.toString());  // Store the count as a string
+    const fetchCount = async () => {
+      try {
+        const response = await fetch('https://ai-image-generator-f5m8.onrender.com/api/v1/count');
+        const data = await response.json();
+        setCount(data.data.count);
+      } catch (error) {
+        console.error('Error fetching count:', error);
+      }
+    };
+
+    fetchCount();
+  }, []);
+
+
+  useEffect(() => {
+    const updateCount = async () => {
+      try {
+        await fetch('https://ai-image-generator-f5m8.onrender.com/api/v1/count', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ count }),
+        });
+      } catch (error) {
+        console.error('Error updating count:', error);
+      }
+    };
+
+    if (count >= 0) {
+      updateCount();
+    }
   }, [count]);
 
   const succesNoti = (text) => {
@@ -60,8 +87,8 @@ const CreatePost = () => {
   const generateImage = async () => {
     if (form.prompt) {
       try {
-        if(count >= 10) {
-          alert('You have reached the limit of 10 images');
+        if(count >= 5) {
+          alert('You have reached the limit of 5 images');
           return;
         }
         setGeneratingText(true);
@@ -184,7 +211,7 @@ const CreatePost = () => {
             >
               {generatingText ? 'Generating...' : 'Generate'}
             </button>
-            <p className='text-[#222629] text-[14px]'>Limit per reset: {count} / 10</p>
+            <p className='text-[#222629] text-[14px] inline'>Limit per reset: {count !== -1 ? <div>{count} / 5</div> : <p>Loading...</p>}</p>
         </div>
         <div className='mt-10'>
           <p className='mt-2 text-[#666e75] text-[14px]'>Once you have created the image you want, you can share it to the community</p>
@@ -201,7 +228,7 @@ const CreatePost = () => {
       <div className='mt-36'>
             <div className='bg-black w-full h-[0.5px]'></div>
             <h2 className='text-[#222328] text-[25px] font-semibold'>Usage Limit</h2>
-            <p className='text-[#666e75] text-[12px] inline'>Warning: Users can generate images up to 10 times. Only an admin with the password can reset this limit. If you want to reset the usage limit, click here: </p>
+            <p className='text-[#666e75] text-[12px] inline'>Note: Users can generate images up to 10 times. Only an admin with the password can reset this limit. If you want to reset the usage limit, click here: </p>
             <button className='text-[#666e75] text-[14px] ml-3' onClick={() => {setReset(!reset)}}>Reset</button>
             <ToastContainer />
         </div>
