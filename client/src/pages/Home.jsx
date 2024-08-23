@@ -12,7 +12,7 @@ const Home = () => {
     setLoading(true);
     const fetchPosts = async () => {
       try {
-        const response = await fetch('https://ai-image-generator-f5m8.onrender.com/api/v1/post', {
+        const response = await fetch('http://localhost:8080/api/v1/post', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -39,8 +39,16 @@ const Home = () => {
     }
   }
 
+  const updateLoveCount = (updatedPost) => {
+    setPosts(posts.map(post => (post._id === updatedPost._id ? updatedPost : post)));
+    if (filteredPosts) {
+      setFilteredPosts(filteredPosts.map(post => (post._id === updatedPost._id ? updatedPost : post)));
+    }
+  };
+
   const RenderCards = ({ data, title }) => {
-    if (data?.length > 0) return data.map(post => <Card key={post.id} name={post.name} prompt={post.prompt} photo={post.photo} />)
+    if (data?.length > 0) return data.map(post => <Card _id={post._id} name={post.name} prompt={post.prompt} photo={post.photo} love={post.love} onLoveUpdate={updateLoveCount} 
+      />)
     return (
       <h2 className="mt-5 font-bold text-[#6449ff] text-xl uppercase">No results found for <span className="text-[#222328]">{title}</span></h2>
     )  

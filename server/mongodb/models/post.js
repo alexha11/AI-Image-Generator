@@ -13,6 +13,10 @@ const Post = new mongoose.Schema({
     type: String,
     required: true,
   },
+  love: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const post = mongoose.model("Post", Post);

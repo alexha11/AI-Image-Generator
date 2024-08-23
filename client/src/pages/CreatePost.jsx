@@ -228,7 +228,7 @@ const CreatePost = () => {
       <div className='mt-36'>
             <div className='bg-black w-full h-[0.5px]'></div>
             <h2 className='text-[#222328] text-[25px] font-semibold'>Usage Limit</h2>
-            <p className='text-[#666e75] text-[12px] inline'>Note: Users can generate images up to 10 times. Only an admin with the password can reset this limit. If you want to reset the usage limit, click here: </p>
+            <p className='text-[#666e75] text-[12px] inline'>Note: Users can generate images up to 5 times. Only an admin with the password can reset this limit. If you want to reset the usage limit, click here: </p>
             <button className='text-[#666e75] text-[14px] ml-3' onClick={() => {setReset(!reset)}}>Reset</button>
             <ToastContainer />
         </div>

@@ -38,11 +38,50 @@ router.route('/').post(async (req, res) => {
       name,
       prompt,
       photo: photoUrl.url,
+      love: 0,
     });
     res.status(201).json({ success: true, data: newPost });
   } catch (error) {
     res.status(500).json({ success: false, data: error});
   }
 })
+
+router.route('/:id').delete(async (req, res) => {
+  try {
+    const post = await Post.findByIdAndDelete(req.params.id);
+    res.status(200).json({ success: true, data: post });
+  }
+  catch (error) {
+    res.status(500).json({ success: false, data: error});
+  }
+})
+
+router.put('/:id', async (req, res) => {
+  try {
+    const { name, prompt, photo, love } = req.body;  
+
+    const updatedPost = {
+      name: name,
+      prompt: prompt,
+      photo: photo,
+      love: love,
+    };
+
+    const post = await Post.findByIdAndUpdate(req.params.id, updatedPost, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!post) {
+      return res.status(404).json({ success: false, message: 'Post not found' });
+    }
+
+    res.status(200).json({ success: true, data: post });
+  } catch (error) {
+    console.error('Error updating post:', error);
+    res.status(500).json({ success: false, data: error.message });
+  }
+});
+
 
 export default router;
