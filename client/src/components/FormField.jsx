@@ -1,5 +1,3 @@
-import { preview } from '../assets';
-
 const FormField = ( {LabelName, type, name, placeholder, value, handleChange, isSupriseMe, handleGenerating} ) => {
   return (
    <div>
