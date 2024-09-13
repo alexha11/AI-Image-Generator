@@ -19,7 +19,7 @@ cloudinary.config({
 
 router.route('/').get(async (req, res) => {
   try {
-    const posts = await Post.find({});
+    const posts = await Post.find({}).populate('user', { username: 1, email: 1, password: 1 });
 
     res.status(200).json({ success: true, data: posts });
 
