@@ -93,7 +93,7 @@ const Login = () => {
       window.localStorage.setItem('loggedAIAppUser', JSON.stringify(data));
       setUser(data); // Set the logged-in user to context
       successNoti('Logged in successfully');
-      navigate('/profile');
+      navigate('/home');
     } catch (error) {
       console.error('Error logging in:', error);
       errorNoti('Wrong credentials');

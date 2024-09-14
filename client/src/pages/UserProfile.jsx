@@ -1,23 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import { postService } from '../services';
+import { UserContext } from './UserContext';
 
 const UserProfile = () => {
-  const [user, setUser] = useState(null);
+  const { user } = useContext(UserContext);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const loggedUserJSON = window.localStorage.getItem('loggedAIAppUser')
-      if (loggedUserJSON) {
-        const user = JSON.parse(loggedUserJSON)
-        setUser(user)
-        postService.setToken(user.token)
-        console.log(user);
-      }
-    };
-
-    fetchUser();
-  }
-  , []);
 
   return (
     <div>
