@@ -7,6 +7,10 @@ import { FormField, Loader } from '../components';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { postService } from '../services';
+import { countService } from '../services';
+import { dalleService } from '../services';
+
 const CreatePost = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -25,8 +29,7 @@ const CreatePost = () => {
   useEffect(() => {
     const fetchCount = async () => {
       try {
-        const response = await fetch('https://ai-image-generator-f5m8.onrender.com/api/v1/count');
-        const data = await response.json();
+        const data = await countService.getAll();
         setCount(data.data.count);
       } catch (error) {
         console.error('Error fetching count:', error);
@@ -40,13 +43,9 @@ const CreatePost = () => {
   useEffect(() => {
     const updateCount = async () => {
       try {
-        await fetch('https://ai-image-generator-f5m8.onrender.com/api/v1/count', {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ count }),
-        });
+        // const data = await countService.patch(count);
+        // console.log(data);
+        //fix latter
       } catch (error) {
         console.error('Error updating count:', error);
       }
@@ -92,14 +91,7 @@ const CreatePost = () => {
           return;
         }
         setGeneratingText(true);
-        const response = await fetch('https://ai-image-generator-f5m8.onrender.com/api/v1/dalle', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ prompt: form.prompt}),
-        });
-        const data = await response.json();
+        const data = await dalleService.generate(form.prompt);
         console.log(data);
         setForm({ ...form, photo:  'data:image/jpeg;base64,' + data.photo });
         setGeneratingText(false);
@@ -122,14 +114,7 @@ const CreatePost = () => {
     if (form.prompt && form.photo) {
       try {
         setLoading(true);
-        const response = await fetch('https://ai-image-generator-f5m8.onrender.com/api/v1/post', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(form),
-        });
-        const data = await response.json();
+        const data = await postService.create(form);
         console.log(data);
         navigate('/');
         succesNoti('Image shared successfully');

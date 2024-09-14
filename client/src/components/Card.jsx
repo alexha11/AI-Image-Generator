@@ -3,6 +3,8 @@ import React from 'react';
 import { download, heart } from '../assets';
 import { downloadImage } from '../utils';
 
+import { postService } from '../services';
+
 const Card = ({ _id, name, prompt, photo, love, onLoveUpdate }) => {
   const handleLoveButton = async () => {
     console.log('love button clicked' + _id); 
@@ -14,18 +16,8 @@ const Card = ({ _id, name, prompt, photo, love, onLoveUpdate }) => {
       love: love + 1,
     }
     try {
-      const response = await fetch(`https://ai-image-generator-f5m8.onrender.com/api/v1/post/${_id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newPost), 
-      });
-      const data = await response.json();
-      if (data.success) {
-        onLoveUpdate(newPost);
-        console.log(data.data);
-      }
+      const response = await postService.update(_id, newPost);
+      onLoveUpdate(response.data);
     } catch (error) {
       console.error('Error updating love:', error);
     }

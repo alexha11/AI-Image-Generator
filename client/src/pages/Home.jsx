@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Loader, Card, FormField } from "../components";
+import { postService } from "../services";
 
 const Home = () => {
   const [loading, setLoading] = useState(false );
@@ -12,13 +13,7 @@ const Home = () => {
     setLoading(true);
     const fetchPosts = async () => {
       try {
-        const response = await fetch('https://ai-image-generator-f5m8.onrender.com/api/v1/post', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        const data = await response.json();
+        const data = await postService.getAll();
         setPosts(data.data.reverse());
         console.log(posts)
         setLoading(false);
@@ -40,6 +35,7 @@ const Home = () => {
   }
 
   const updateLoveCount = (updatedPost) => {
+    
     setPosts(posts.map(post => (post._id === updatedPost._id ? updatedPost : post)));
     if (filteredPosts) {
       setFilteredPosts(filteredPosts.map(post => (post._id === updatedPost._id ? updatedPost : post)));

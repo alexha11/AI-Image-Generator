@@ -11,4 +11,9 @@ const create = async (newObject) => {
   return response.data;
 }
 
-export default { getAll, create };
+const patch = async (newObject) => {
+  const response = await axios.patch(baseUrl, newObject);
+  return response.data;
+}
+
+export default { getAll, create, patch };
