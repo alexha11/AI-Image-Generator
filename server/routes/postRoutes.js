@@ -32,6 +32,7 @@ router.route('/').get(async (req, res) => {
 router.route('/').post(async (req, res) => {
   try {
     const { name, prompt, photo } = req.body;
+    const user = req.user;
     const photoUrl = await cloudinary.uploader.upload(photo)
     
     const newPost = await Post.create({
@@ -39,7 +40,21 @@ router.route('/').post(async (req, res) => {
       prompt,
       photo: photoUrl.url,
       love: 0,
+      user: user._id,
     });
+    newPost.save();
+
+    if (!newPost) {
+      return res.status(400).json({ success: false, message: 'Post not created' });
+    } 
+    if (!photoUrl) {
+      return res.status(400).json({ success: false, message: 'Photo not uploaded' });
+    }
+    if (!user) {
+      return res.status(400).json({ success: false, message: 'User not found' });
+    }
+
+
     res.status(201).json({ success: true, data: newPost });
   } catch (error) {
     res.status(500).json({ success: false, data: error});

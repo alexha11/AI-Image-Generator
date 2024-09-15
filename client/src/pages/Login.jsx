@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FormField } from '../components';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { userService } from '../services';
+import { postService, userService } from '../services';
 import { UserContext } from './UserContext'; 
 
 const Login = () => {
@@ -91,9 +91,12 @@ const Login = () => {
     try {
       const data = await userService.login(user);
       window.localStorage.setItem('loggedAIAppUser', JSON.stringify(data));
+
       setUser(data); // Set the logged-in user to context
-      successNoti('Logged in successfully');
+      console.log(data.token );
+      postService.setToken(data.token);
       navigate('/home');
+      successNoti('Logged in successfully');
     } catch (error) {
       console.error('Error logging in:', error);
       errorNoti('Wrong credentials');

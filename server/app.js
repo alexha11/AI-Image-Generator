@@ -33,9 +33,11 @@ app.use(cors(
 ));
 app.use(express.json({ limit: '50mb' }));
 
+app.use(middleware.tokenExtractor);
+
 app.use(middleware.requestLogger);
 
-app.use('/api/v1/post', postRoutes);
+app.use('/api/v1/post', middleware.userExtractor, postRoutes);
 app.use('/api/v1/dalle', dalleRoutes);
 app.use('/api/v1/count', countRoutes);
 app.use('/api/v1/user', userRoutes);

@@ -1,5 +1,4 @@
-import { useState, useContext } from 'react';
-import { postService } from '../services';
+import { useContext } from 'react';
 import { UserContext } from './UserContext';
 
 const UserProfile = () => {

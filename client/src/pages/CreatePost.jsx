@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { preview } from '../assets';
 import { getRandomPrompt } from '../utils';
@@ -10,11 +10,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import { postService } from '../services';
 import { countService } from '../services';
 import { dalleService } from '../services';
+import { UserContext } from './UserContext';
 
 const CreatePost = () => {
+  const { user } = useContext(UserContext);
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    name: '',
+    name: user.username,
     prompt: '',
     photo: '',
   });
@@ -116,7 +118,7 @@ const CreatePost = () => {
         setLoading(true);
         const data = await postService.create(form);
         console.log(data);
-        navigate('/');
+        navigate('/home');
         succesNoti('Image shared successfully');
 
       } catch (error) {
@@ -157,7 +159,7 @@ const CreatePost = () => {
       <form className='mt-16 max-w-3xl' onSubmit={handleSubmit}>
         <div className='flex flex-col gap-5'>
           <FormField
-              LabelName='Your name'
+              LabelName='Your name (optional)'
               type='text'
               name='name'
               placeholder='Ex., Duong'

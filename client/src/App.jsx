@@ -4,7 +4,7 @@ import { logo } from './assets';
 
 import { Home, CreatePost, UserProfile } from './pages';
 import Login from './pages/Login';
-import { UserContext } from './pages/UserContext'; // Import UserContext
+import { UserContext } from './pages/UserContext'; 
 
 const App = () => {
   const { user, setUser } = useContext(UserContext); // Access setUser from UserContext
@@ -94,19 +94,30 @@ const App = () => {
                     Profile
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    to="/"
-                    onClick={() => {
-                      window.localStorage.removeItem('loggedAIAppUser'); // Remove from localStorage
-                      setUser(null); // Clear global user state
-                      toggleDropdown(); // Close the dropdown
-                    }}
-                    className="text-[#222629] text-sm hover:bg-gray-200 p-2 rounded-md block"
-                  >
-                    Logout
-                  </Link>
-                </li>
+                {user ? (
+                  <li>
+                    <Link
+                      to="/"
+                      onClick={() => {
+                        setUser(null);
+                        toggleDropdown();
+                      }}
+                      className="text-[#222629] text-sm hover:bg-gray-200 p-2 rounded-md block"
+                    >
+                      Logout
+                    </Link>
+                  </li>
+                ) : (
+                  <li>
+                    <Link
+                      to="/"
+                      onClick={toggleDropdown}
+                      className="text-[#222629] text-sm hover:bg-gray-200 p-2 rounded-md block"
+                    >
+                      Login
+                    </Link>
+                  </li>
+                )}
               </ul>
             </nav>
           )}

@@ -1,9 +1,11 @@
 import logger from './logger.js';
+import jwt from 'jsonwebtoken';
 
 const requestLogger = (req, res, next) => {
   logger.info('Method:', req.method);
   logger.info('Path:  ', req.path);
   logger.info('Body:  ', req.body);
+  logger.info('Token:', req.token);
   logger.info('---');
   next();
 }
@@ -31,6 +33,7 @@ const tokenExtractor = (req, res, next) => {
   } else {
     req.token = null;
   }
+  logger.info('Token: after extract', req.token);
   next();
 }
 
@@ -52,5 +55,7 @@ const userExtractor = (req, res, next) => {
 export default {
   requestLogger,
   unknownEndpoint,
-  errorHandler
+  errorHandler, 
+  tokenExtractor,
+  userExtractor,
 }
