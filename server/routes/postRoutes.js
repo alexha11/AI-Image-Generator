@@ -4,6 +4,7 @@ import {v2 as cloudinary} from 'cloudinary';
 
 import Post from '../mongodb/models/post.js';
 
+
 dotenv.config();
 
 
@@ -15,14 +16,15 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-// Get all posts
+
+
 
 router.route('/').get(async (req, res) => {
   try {
     const posts = await Post.find({}).populate('user', { username: 1, email: 1, password: 1 });
 
     res.status(200).json({ success: true, data: posts });
-
+    
   } catch (error) {
     res.status(500).json({ success: false, data: error});
     console.error(error);
@@ -34,15 +36,16 @@ router.route('/').post(async (req, res) => {
     const { name, prompt, photo } = req.body;
     const user = req.user;
     const photoUrl = await cloudinary.uploader.upload(photo)
+    console.log('User ID:', user.id);
     
     const newPost = await Post.create({
       name,
       prompt,
       photo: photoUrl.url,
       love: 0,
-      user: user._id,
+      user: user.id,
     });
-    newPost.save();
+
 
     if (!newPost) {
       return res.status(400).json({ success: false, message: 'Post not created' });

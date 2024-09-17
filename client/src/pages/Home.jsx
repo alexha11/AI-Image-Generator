@@ -35,7 +35,7 @@ const Home = () => {
   }
 
   const updateLoveCount = (updatedPost) => {
-    
+
     setPosts(posts.map(post => (post._id === updatedPost._id ? updatedPost : post)));
     if (filteredPosts) {
       setFilteredPosts(filteredPosts.map(post => (post._id === updatedPost._id ? updatedPost : post)));

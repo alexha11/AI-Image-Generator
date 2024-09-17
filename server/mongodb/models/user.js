@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
 
-const User = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
@@ -19,16 +19,21 @@ const User = new mongoose.Schema({
     required: true,
     minLenght: 5,
   },
-  posts: [
+  count : {
+    type: Number,
+    default: 0,
+  },
+  LovedPosts: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Post",
+      default: [],
     },
   ],
 });
 
-User.plugin(uniqueValidator);
+UserSchema.plugin(uniqueValidator);
 
-const user = mongoose.model("User", User);
+const User = mongoose.model("User", UserSchema);
 
-export default user;
+export default User;

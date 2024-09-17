@@ -19,10 +19,10 @@ const PostSchema = new mongoose.Schema({
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",  // Referencing the User model
+    ref: "User",   
     required: true,
   },
-}, { timestamps: true });
+});
 
 const Post = mongoose.model("Post", PostSchema);
 

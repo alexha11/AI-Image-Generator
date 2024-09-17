@@ -9,7 +9,7 @@ const router = express.Router();
 dotenv.config();
 
 router.route('/').get(async (req, res) => {
-  const users = await User.find({}).populate('posts', { name: 1, prompt: 1, photo: 1, love: 1 });
+  const users = await User.find({});
   res.status(200).json({ success: true, data: users });
 });
 
@@ -45,7 +45,7 @@ router.route('/login').post(async (req, res) => {
     }
 
     const token = jwt.sign(userForToken, process.env.SECRET);
-    res.status(200).send({ token, email: user.email, username: user.username });
+    res.status(200).send({ token, email: user.email, username: user.username, id: user._id });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
