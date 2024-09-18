@@ -118,7 +118,7 @@ const CreatePost = () => {
         setLoading(true);
         const data = await postService.create(form);
         console.log(data);
-        navigate('/home');
+        navigate('/');
         succesNoti('Image shared successfully');
 
       } catch (error) {

@@ -1,4 +1,4 @@
-import userService from './login';
+import userService from './user';
 import postService from './post';
 import dalleService from './dalle';
 import countService from './count';

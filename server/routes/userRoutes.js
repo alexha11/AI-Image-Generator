@@ -9,8 +9,18 @@ const router = express.Router();
 dotenv.config();
 
 router.route('/').get(async (req, res) => {
-  const users = await User.find({});
+  const users = await User.find({})
+                .populate('lovedPosts', { name: 1, prompt: 1, photo: 1, love: 1 })
+                .populate('createdPosts', { name: 1, prompt: 1, photo: 1, love: 1 });
   res.status(200).json({ success: true, data: users });
+});
+
+router.route('/:id').get(async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id)
+                .populate('lovedPosts', { name: 1, prompt: 1, photo: 1, love: 1 })
+                .populate('createdPosts', { name: 1, prompt: 1, photo: 1, love: 1 });
+  res.status(200).json({ success: true, data: user });
 });
 
 router.route('/').post(async (req, res) => {
@@ -45,7 +55,7 @@ router.route('/login').post(async (req, res) => {
     }
 
     const token = jwt.sign(userForToken, process.env.SECRET);
-    res.status(200).send({ token, email: user.email, username: user.username, id: user._id });
+    res.status(200).send({ token, email: user.email, username: user.username, id: user._id});
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

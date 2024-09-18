@@ -46,7 +46,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <header className='w-full flex justify-between items-center bg-white sm:px-8 px-4 py-4 border-b border-b-[#e6ebf4]'>
-        <Link to="/home">
+        <Link to="/">
           <img src={logo} alt="logo" className='w-28 object-contain'/>
         </Link>
         <div className="relative w-60 flex justify-end">
@@ -70,7 +70,7 @@ const App = () => {
               <ul className="flex flex-col gap-5 p-4">
                 <li>
                   <Link
-                    to="/home"
+                    to="/"
                     onClick={toggleDropdown}
                     className="text-[#222629] text-sm hover:bg-gray-200 p-2 rounded-md block"
                   >
@@ -98,7 +98,7 @@ const App = () => {
                 {user ? (
                   <li>
                     <Link
-                      to="/"
+                      to="/login"
                       onClick={() => {
                         setUser(null);
                         window.localStorage.removeItem('loggedAIAppUser');
@@ -114,7 +114,7 @@ const App = () => {
                 ) : (
                   <li>
                     <Link
-                      to="/"
+                      to="/login"
                       onClick={toggleDropdown}
                       className="text-[#222629] text-sm hover:bg-gray-200 p-2 rounded-md block"
                     >
@@ -129,10 +129,10 @@ const App = () => {
       </header>
       <main className='sm:p-8 px-4 py-8 w-full bg-[#f9fafe] min-h-[calc(100vh-73px)]'>
         <Routes>
-          <Route path='/' element={<Login />} />
+          <Route path='/login' element={<Login />} />
           <Route path='/create-post' element={<CreatePost />} />
           <Route path='/profile' element={<UserProfile />} />
-          <Route path='/home' element={<Home />} />
+          <Route path='/' element={<Home />} />
         </Routes>
       </main>
     </BrowserRouter>

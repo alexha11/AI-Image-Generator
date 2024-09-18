@@ -1,21 +1,22 @@
-import React, {useContext} from 'react';
+import React from 'react';
 
 import { download, heart } from '../assets';
 import { downloadImage } from '../utils';
 
 import { postService } from '../services';
-import { UserContext } from '../pages/UserContext';5
-
 
 const Card = ({ _id, name, prompt, photo, love, onLoveUpdate }) => {
-  const { user } = useContext(UserContext);
   const handleLoveButton = async () => {
     console.log('love button clicked' + _id); 
+    const newPost = {
+      _id: _id,
+      name: name,
+      prompt: prompt,
+      photo: photo,
+      love: love + 1,
+    }
     try {
-      const response = await postService.update(_id, { 
-        postId: _id,
-        userId: user.id,
-       });
+      const response = await postService.update(_id, newPost);
       onLoveUpdate(response.data);
     } catch (error) {
       console.error('Error updating love:', error);

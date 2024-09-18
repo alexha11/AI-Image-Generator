@@ -95,8 +95,9 @@ const Login = () => {
       setUser(data); // Set the logged-in user to context
       console.log(data.token );
       postService.setToken(data.token);
-      navigate('/home');
+      navigate('/');
       successNoti('Logged in successfully');
+      console.log(data);
     } catch (error) {
       console.error('Error logging in:', error);
       errorNoti('Wrong credentials');
