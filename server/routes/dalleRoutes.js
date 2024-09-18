@@ -18,6 +18,10 @@ router.route('/').post(async (req, res) => {
   try {
     const { prompt } = req.body;
 
+    if (!prompt) {
+      return res.status(400).json({ error: 'Prompt is required' }); 
+    }
+
     const aiResponse = await openai.images.generate({
       model: 'dall-e-2',
       prompt: prompt,
@@ -32,7 +36,7 @@ router.route('/').post(async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).send(error.message);
+    res.status(500).send(error.message);    
   }
 });
 

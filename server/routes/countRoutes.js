@@ -31,23 +31,29 @@ router.post("/", async (req, res) => {
   }
 });
 
-// PUT route to update the count
-router.put("/", async (req, res) => {
-  try {
-    const { count } = req.body;
-    
-    // Use findOneAndUpdate with upsert: true to either update the existing count or create a new document if it doesn't exist
-    const updatedCount = await Count.findOneAndUpdate(
-      {}, // Match the first document (since there's only one)
-      { $set: { count } }, // Update the count field
-      { new: true, upsert: true } // Return the updated document and create one if it doesn't exist
-    );
+router.patch('/', async (req, res) => {
+  const { count } = req.body;
 
-    res.status(200).json({ success: true, data: updatedCount });
+  // Basic validation to check if 'count' is provided and is a number
+  if (typeof count !== 'number') {
+    return res.status(400).send({ error: 'Invalid count value' });
+  }
+
+  try {
+    // Replace this with your actual logic to update the count in the database
+    await updateCountInDatabase(count); // Example: await db.update({ count });
+    
+    // Send a success response with the updated count
+    res.status(200).send({ success: true, count });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    console.error('Error updating count:', error);
+    
+    // Send a 500 response in case of any internal server errors
+    res.status(500).send({ error: 'Failed to update count' });
   }
 });
+
+
 
 
 export default router;

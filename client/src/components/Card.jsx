@@ -3,6 +3,8 @@ import React from 'react';
 import { download, heart } from '../assets';
 import { downloadImage } from '../utils';
 
+import { postService } from '../services';
+
 const Card = ({ _id, name, prompt, photo, love, onLoveUpdate }) => {
   const handleLoveButton = async () => {
     console.log('love button clicked' + _id); 
@@ -14,18 +16,8 @@ const Card = ({ _id, name, prompt, photo, love, onLoveUpdate }) => {
       love: love + 1,
     }
     try {
-      const response = await fetch(`https://ai-image-generator-f5m8.onrender.com/api/v1/post/${_id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newPost), 
-      });
-      const data = await response.json();
-      if (data.success) {
-        onLoveUpdate(newPost);
-        console.log(data.data);
-      }
+      const response = await postService.update(_id, newPost);
+      onLoveUpdate(response.data);
     } catch (error) {
       console.error('Error updating love:', error);
     }
@@ -51,7 +43,7 @@ const Card = ({ _id, name, prompt, photo, love, onLoveUpdate }) => {
   
         <div className="mt-5 flex justify-between items-center gap-2">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-full object-cover bg-green-700 flex justify-center items-center text-white text-xs font-bold">{name[0]}</div>
+            <div className="w-7 h-7 rounded-full object-cover bg-green-700 flex justify-center items-center text-white text-xs font-bold">{name[0].toUpperCase()}</div>
             <p className="text-white text-sm">{name}</p>
           </div>
           <button type="button" onClick={() => downloadImage(_id, photo)} className="outline-none bg-transparent border-none">
