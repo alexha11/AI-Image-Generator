@@ -10,12 +10,13 @@ import userRoutes from './routes/userRoutes.js';
 
 import middleware from './utils/middleware.js'
 import logger from './utils/logger.js';
+import config from './utils/config.js';
  
 dotenv.config(); 
 
 try {
-  connectDB(process.env.MONGODB_URL);
-  logger.info('Connected to MongoDB');
+  connectDB(config.MONGODB_URI);
+  logger.info('Connected to MongoDB' + config.MONGODB_URI);
 }
 catch (error) { 
   logger.error('Error connecting to MongoDB:', error.message);

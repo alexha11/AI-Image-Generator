@@ -16,5 +16,14 @@ const register = async (user) => {
   return response.data;
 }
 
+const update = async (id, user) => {
+  const response = await axios.put(`${baseUrl}/${id}`, user);
+  return response.data;
+}
 
-export default { login, getById, register };
+const updateCount = async (id, count) => {
+  const response = await axios.put(`${baseUrl}/${id}`, count);
+  return response.data;
+}
+
+export default { login, getById, register, update, updateCount };
