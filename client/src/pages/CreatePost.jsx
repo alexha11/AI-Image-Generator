@@ -8,7 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { postService } from '../services';
-import { countService } from '../services';
+import { userService } from '../services';
 import { dalleService } from '../services';
 import { UserContext } from './UserContext';
 
@@ -31,9 +31,10 @@ const CreatePost = () => {
   useEffect(() => {
     const fetchCount = async () => {
       try {
-        const data = await countService.getAll();
+        const data = await userService.getById(user.id);
         setCount(data.data.count);
-      } catch (error) {
+      }
+      catch (error) {
         console.error('Error fetching count:', error);
       }
     };
@@ -41,22 +42,6 @@ const CreatePost = () => {
     fetchCount();
   }, []);
 
-
-  useEffect(() => {
-    const updateCount = async () => {
-      try {
-        // const data = await countService.patch(count);
-        // console.log(data);
-        //fix latter
-      } catch (error) {
-        console.error('Error updating count:', error);
-      }
-    };
-
-    if (count >= 0) {
-      updateCount();
-    }
-  }, [count]);
 
   const succesNoti = (text) => {
     toast.success(text, {
@@ -98,6 +83,8 @@ const CreatePost = () => {
         setForm({ ...form, photo:  'data:image/jpeg;base64,' + data.photo });
         setGeneratingText(false);
         setCount(count + 1);
+        await userService.updateCount(user.id, count + 1);
+
         succesNoti('Image generated successfully');
       } catch (error) {
         console.log(error);
@@ -139,10 +126,11 @@ const CreatePost = () => {
     setForm({ ...form, prompt: randomPrompt });
   }
 
-  const checkPassword = () => {
+  const checkPassword = async() => {
     if(password === import.meta.env.VITE_PASSWORD) {
       succesNoti('Usage limit resets successfully');
       setCount(0);
+      await userService.updateCount(user.id, 0);
       setReset(false);
       setPassword('');
     } else {

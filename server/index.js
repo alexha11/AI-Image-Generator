@@ -1,7 +1,8 @@
 import app from './app.js';
 import logger from './utils/logger.js';
+import config from './utils/config.js';
 
-const PORT = process.env.PORT || 8080;
+const PORT = config.PORT;
 
 app.listen(PORT, () => {
   logger.info(`Server running on port ${PORT}`);
