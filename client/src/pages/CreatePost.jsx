@@ -16,7 +16,7 @@ const CreatePost = () => {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    name: user.username,
+    name: '',
     prompt: '',
     photo: '',
   });
@@ -31,8 +31,15 @@ const CreatePost = () => {
   useEffect(() => {
     const fetchCount = async () => {
       try {
-        const data = await userService.getById(user.id);
-        setCount(data.data.count);
+        const loggedUserJSON = window.localStorage.getItem('loggedAIAppUser');
+
+        if (loggedUserJSON) {
+          const user = JSON.parse(loggedUserJSON);
+          setForm({ ...form, name: user.username });
+          const data = await userService.getById(user.id);
+          setCount(data.data.count);
+        }
+       
       }
       catch (error) {
         console.error('Error fetching count:', error);
@@ -78,11 +85,12 @@ const CreatePost = () => {
           return;
         }
         setGeneratingText(true);
-        const data = await dalleService.generate(form.prompt);
-        console.log(data);
-        setForm({ ...form, photo:  'data:image/jpeg;base64,' + data.photo });
+        //const data = await dalleService.generate(form.prompt);
+        //console.log(data);
+        //setForm({ ...form, photo:  'data:image/jpeg;base64,' + data.photo });
         setGeneratingText(false);
         setCount(count + 1);
+        console.log(user.id);
         await userService.updateCount(user.id, count + 1);
 
         succesNoti('Image generated successfully');
@@ -182,7 +190,7 @@ const CreatePost = () => {
             <button
             type='button'
             onClick={generateImage}
-            className='text-white bg-[#5adbb5] hover:bg-[#5dbea3] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center'
+            className='text-white bg-slate-500 hover:bg-slate-400 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center'
             >
               {generatingText ? 'Generating...' : 'Generate'}
             </button>
