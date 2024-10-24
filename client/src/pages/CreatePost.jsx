@@ -9,7 +9,6 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { postService } from '../services';
 import { userService } from '../services';
-import { dalleService } from '../services';
 import { UserContext } from './UserContext';
 
 const CreatePost = () => {
@@ -188,10 +187,20 @@ const CreatePost = () => {
         </div>
         <div className='mt-5 flex items-center gap-5'> 
             <button
-            type='button'
-            onClick={generateImage}
-            className='text-white bg-slate-500 hover:bg-slate-400 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center'
+              className="linear flex flex-row items-center rounded-xl bg-green-500 px-5 py-2.5 text-sm font-medium text-white transition duration-200 hover:bg-green-600 active:bg-green-700 dark:bg-green-400 dark:text-white dark:hover:bg-green-300 dark:active:bg-green-200"
+              data-ripple-light
+              onClick={generateImage}
+              type='button'
             >
+              <svg
+                className="mr-2 fill-white"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                height="16"
+                width="16"
+              >
+                <path d="M7.979 14.771Q7.792 14.771 7.615 14.698Q7.438 14.625 7.271 14.458L3.75 10.938Q3.458 10.646 3.469 10.219Q3.479 9.792 3.771 9.5Q4.062 9.208 4.49 9.208Q4.917 9.208 5.188 9.5L8.021 12.333L14.833 5.521Q15.104 5.229 15.521 5.229Q15.938 5.229 16.229 5.521Q16.5 5.812 16.5 6.219Q16.5 6.625 16.229 6.917L8.688 14.458Q8.521 14.625 8.344 14.698Q8.167 14.771 7.979 14.771Z" />
+              </svg>
               {generatingText ? 'Generating...' : 'Generate'}
             </button>
             <p className='text-[#222629] text-[14px] inline'>Limit per reset: {count !== -1 ? <div>{count} / 5</div> : <p>Loading...</p>}</p>

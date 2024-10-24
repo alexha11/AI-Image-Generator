@@ -55,7 +55,7 @@ const App = () => {
             ref={buttonRef} 
           >
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-full object-cover bg-green-700 flex justify-center items-center text-white text-xs font-bold">
+              <div className="w-7 h-7 rounded-full object-cover bg-green-600 flex justify-center items-center text-white text-xs font-bold">
                 {firstLetter}
               </div>
               <p className="text-sm">{name}</p>

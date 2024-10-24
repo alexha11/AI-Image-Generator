@@ -68,7 +68,6 @@ router.route('/login').post(async (req, res) => {
 
 router.route('/:id').put(async (req, res) => {
   const { id } = req.params;
-  console.log("user id", id);
   const { count } = req.body;
   const user = await User.findByIdAndUpdate(id, { count }, { new: true });
   res.status(200).json({ success: true, data: user });

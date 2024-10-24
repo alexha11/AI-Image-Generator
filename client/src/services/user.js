@@ -22,7 +22,7 @@ const update = async (id, user) => {
 }
 
 const updateCount = async (id, count) => {
-  const response = await axios.put(`${baseUrl}/${id}`, count);
+  const response = await axios.put(`${baseUrl}/${id}`, {count});
   return response.data;
 }
 
