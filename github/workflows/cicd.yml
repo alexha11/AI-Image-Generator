@@ -25,5 +25,5 @@ jobs:
       - name: pull image from docker hub
         run: docker pull duongha11/serveraigenerator:latest
       - name: run container
-        run: docker run -d -p 4000:4000 --name server-app-container -e MONGO_PASSWORD
+        run: docker run -d -p 4000:4000 --name server-app-container -e MONGO_PASSWORD='${{ secrets.MONGO_PASSWORD }}' duongha11/serveraigenerator:latest
 
