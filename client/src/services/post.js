@@ -37,4 +37,12 @@ const remove = async (id) => {
   return response.data;
 }
 
-export default { setToken, getAll, create, update, remove };
+const toggleLove = async (postId) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+  const response = await axios.post(`${baseUrl}/${postId}/love`, {}, config);
+  return response;
+};
+
+export default { setToken, getAll, create, update, remove, toggleLove };

@@ -9,6 +9,7 @@ const UserProfile = () => {
   const [loveReceived, setLoveReceived] = useState(0);
   const [createdPostSortedByLove, setCreatedPostSortedByLove] = useState(null);
   const [postCount, setPostCount] = useState(0);
+  const [lovePostCount, setLovePostCount] = useState(0);
 
   const [lovedPost, setLovedPost] = useState(null);
   const [loading, setLoading] = useState(true); 
@@ -34,6 +35,7 @@ const UserProfile = () => {
           setLoveReceived(createdPost.reduce((acc, post) => acc + post.love, 0));
           setCreatedPostSortedByLove(createdPost.sort((a, b) => b.love - a.love));
           setPostCount(createdPost.length);
+          setLovePostCount(lovedPost.length);
 
           setLovedPost(lovedPost);
         }
@@ -59,6 +61,7 @@ const UserProfile = () => {
         <div className='m-auto w-full border-2 border-stone-950 p-4 rounded-md mb-2'>
           <p className='h6'>Hello {user.username}</p>
           <p className='body-2'>Email: {user.email}</p>
+          <p className='body-2'>Posts loved: {lovePostCount}</p>
           <p className='body-2'>Love received: {loveReceived}</p>
           <p className='body-2'>Post count: {postCount}</p>
         </div>

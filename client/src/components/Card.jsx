@@ -1,25 +1,43 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
+import { UserContext } from '../pages/UserContext';
 
-import { download, heart } from '../assets';
+import { download, heart, unheart } from '../assets';
 import { downloadImage } from '../utils';
 
 import { postService } from '../services';
 
 const Card = ({ _id, name, prompt, photo, love, onLoveUpdate }) => {
+  const { user, setUser } = useContext(UserContext);
+  const [isLovedByUser, setIsLovedByUser] = useState(
+    user?.lovedPosts?.some((post) => post._id === _id)
+  );
+  const [loveCount, setLoveCount] = useState(love);
+
   const handleLoveButton = async () => {
-    console.log('love button clicked' + _id); 
-    const newPost = {
-      _id: _id,
-      name: name,
-      prompt: prompt,
-      photo: photo,
-      love: love + 1,
+    if (!user) {
+      alert('Please login to love a post');
+      return;
     }
     try {
-      const response = await postService.update(_id, newPost);
-      onLoveUpdate(response.data);
-    } catch (error) {
-      console.error('Error updating love:', error);
+      const response = await postService.toggleLove(_id);
+      const updatedPost = response.data.post;
+      const loved = response.data.isLovedByUser;
+
+      setIsLovedByUser(loved);
+      setLoveCount(updatedPost.love);
+
+      onLoveUpdate(updatedPost);
+      
+      let updatedLovedPosts; 
+      if (loved) {
+        updatedLovedPosts = [...user.lovedPosts, updatedPost];
+      }
+      else {
+        updatedLovedPosts = user.lovedPosts.filter((post) => post._id !== _id);
+      }
+      setUser({ ...user, lovedPosts: updatedLovedPosts });
+    } catch {
+      alert('Failed to love the post');
     }
   };
   
@@ -35,9 +53,13 @@ const Card = ({ _id, name, prompt, photo, love, onLoveUpdate }) => {
   
         <div className="flex justify-start items-center mb-2">
           <button className='text-white text-sm mr-3'  onClick={handleLoveButton}>
-            <img src={heart} alt="heart" className="w-6 h-6 object-contain" />
+            <img
+              src={isLovedByUser ? heart : unheart}
+              alt="heart"
+              className="w-6 h-6 object-contain"
+            />
           </button>
-          <p className="text-white text-sm">{love ? love : 0}</p>
+          <p className="text-white text-sm">{loveCount ? loveCount : 0}</p>
         </div>
         <p className="text-white text-sm overflow-y-auto prompt">{prompt}</p>
   
