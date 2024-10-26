@@ -5,7 +5,7 @@ const baseUrl = process.env.NODE_ENV === 'production'
   : 'http://localhost:8080/api/v1/post';
 
 let token = null;
-
+console.log(baseUrl);
 const setToken = newToken => {
   token = `bearer ${newToken}`;
   console.log('token set to', token);

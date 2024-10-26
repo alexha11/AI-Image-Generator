@@ -81,7 +81,7 @@ const UserProfile = () => {
     
       </div>
       <div className='m-auto w-full border-2 border-stone-950 p-4 rounded-md'>
-        <p className='h6'>Posts you created</p>
+        <p className='h6'>Posts you created ans shared</p>
         {createdPostSortedByLove && createdPostSortedByLove.map(post =>
           <div key={post._id} className='flex flex-col mb-2'>
             <a href={post.photo}>

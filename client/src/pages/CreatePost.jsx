@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { postService } from '../services';
 import { userService } from '../services';
+import { dalleService } from '../services';
 import { UserContext } from './UserContext';
 import { RequireLogin } from '../components';
  
@@ -85,9 +86,9 @@ const CreatePost = () => {
           return;
         }
         setGeneratingText(true);
-        //const data = await dalleService.generate(form.prompt);
-        //console.log(data);
-        //setForm({ ...form, photo:  'data:image/jpeg;base64,' + data.photo });
+        const data = await dalleService.generate(form.prompt);
+        console.log(data);
+        setForm({ ...form, photo:  'data:image/jpeg;base64,' + data.photo });
         setGeneratingText(false);
         setCount(count + 1);
         console.log(user.id);

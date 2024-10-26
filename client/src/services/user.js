@@ -4,6 +4,8 @@ const baseUrl = process.env.NODE_ENV === 'production'
   ? 'https://ai-image-generator-f5m8.onrender.com/api/v1/user'
   : 'http://localhost:8080/api/v1/user';
 
+
+  console.log(baseUrl);
 const login = async (user) => {
   const response = await axios.post(`${baseUrl}/login`, user);
   return response.data;
