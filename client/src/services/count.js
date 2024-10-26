@@ -1,5 +1,9 @@
 import axios from 'axios';
-const baseUrl = 'http://localhost:8080/api/v1/count';
+
+const baseUrl = process.env.NODE_ENV === 'production'
+  ? 'https://ai-image-generator-f5m8.onrender.com/api/v1/count'
+  : 'http://localhost:8080/api/v1/count';
+
 
 const getAll = async () => {
   const response = await axios.get(baseUrl);

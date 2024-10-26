@@ -126,14 +126,13 @@ router.post('/:id/love', async (req, res) => {
   try {
     const user = await User.findById(userId);
     const post = await Post.findById(postId);
-
     if (!user || !post) {
       return res.status(404).json({ error: 'User or post not found' });
     }
 
     const isLoved = user.lovedPosts.includes(postId);
     
-    console.log(post)
+   
     if (isLoved) {
       user.lovedPosts.pull(postId);
       post.love -= 1;
@@ -150,6 +149,7 @@ router.post('/:id/love', async (req, res) => {
       post,
       isLovedByUser: !isLoved,
     });
+    console.log('post', post);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
   }

@@ -93,7 +93,7 @@ const Login = () => {
       window.localStorage.setItem('loggedAIAppUser', JSON.stringify(data));
 
       setUser(data); // Set the logged-in user to context
-      console.log(data.token );
+      console.log(data.token);
       postService.setToken(data.token);
       navigate('/');
       successNoti('Logged in successfully');

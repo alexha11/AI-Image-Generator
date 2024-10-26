@@ -55,7 +55,7 @@ router.route('/login').post(async (req, res) => {
     }
 
     const token = jwt.sign(userForToken, process.env.SECRET);
-    res.status(200).send({ token, email: user.email, username: user.username, id: user._id});
+    res.status(200).send({ token, email: user.email, username: user.username, id: user._id, lovedPosts: user.lovedPosts });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

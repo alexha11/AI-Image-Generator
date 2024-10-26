@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { UserContext } from '../pages/UserContext';
 
 import { download, heart, unheart } from '../assets';
@@ -8,8 +8,9 @@ import { postService } from '../services';
 
 const Card = ({ _id, name, prompt, photo, love, onLoveUpdate }) => {
   const { user, setUser } = useContext(UserContext);
+  
   const [isLovedByUser, setIsLovedByUser] = useState(
-    user?.lovedPosts?.some((post) => post._id === _id)
+    user && user.lovedPosts.some((post) => post === _id)
   );
   const [loveCount, setLoveCount] = useState(love);
 
@@ -18,6 +19,7 @@ const Card = ({ _id, name, prompt, photo, love, onLoveUpdate }) => {
       alert('Please login to love a post');
       return;
     }
+    console.log(user);
     try {
       const response = await postService.toggleLove(_id);
       const updatedPost = response.data.post;
@@ -28,20 +30,18 @@ const Card = ({ _id, name, prompt, photo, love, onLoveUpdate }) => {
 
       onLoveUpdate(updatedPost);
       
-      let updatedLovedPosts; 
+      let updatedLovedPostsID; 
       if (loved) {
-        updatedLovedPosts = [...user.lovedPosts, updatedPost];
+        updatedLovedPostsID = user.lovedPosts.concat(_id);
+      } else {
+        updatedLovedPostsID = user.lovedPosts.filter((post) => post !== _id);
       }
-      else {
-        updatedLovedPosts = user.lovedPosts.filter((post) => post._id !== _id);
-      }
-      setUser({ ...user, lovedPosts: updatedLovedPosts });
-    } catch {
+      setUser({ ...user, lovedPosts: updatedLovedPostsID });
+    } catch (error) {
       alert('Failed to love the post');
     }
   };
-  
-  //console.log(_id);
+
   return (
     <div className="rounded-xl group relative boxShadow-card hover:boxShadow-cardhover ">
       <img
@@ -50,9 +50,8 @@ const Card = ({ _id, name, prompt, photo, love, onLoveUpdate }) => {
         alt={prompt}
       />
       <div className="group-hover:flex flex-col max-h-[94.5%] hidden absolute bottom-0 left-0 right-0 bg-[#10131f] m-2 p-4 rounded-md">
-  
         <div className="flex justify-start items-center mb-2">
-          <button className='text-white text-sm mr-3'  onClick={handleLoveButton}>
+          <button className='text-white text-sm mr-3' onClick={handleLoveButton}>
             <img
               src={isLovedByUser ? heart : unheart}
               alt="heart"
@@ -62,10 +61,11 @@ const Card = ({ _id, name, prompt, photo, love, onLoveUpdate }) => {
           <p className="text-white text-sm">{loveCount ? loveCount : 0}</p>
         </div>
         <p className="text-white text-sm overflow-y-auto prompt">{prompt}</p>
-  
         <div className="mt-5 flex justify-between items-center gap-2">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-full object-cover bg-green-600 flex justify-center items-center text-white text-xs font-bold">{name[0].toUpperCase()}</div>
+            <div className="w-7 h-7 rounded-full object-cover bg-green-600 flex justify-center items-center text-white text-xs font-bold">
+              {name[0].toUpperCase()}
+            </div>
             <p className="text-white text-sm">{name}</p>
           </div>
           <button type="button" onClick={() => downloadImage(_id, photo)} className="outline-none bg-transparent border-none">
@@ -75,6 +75,6 @@ const Card = ({ _id, name, prompt, photo, love, onLoveUpdate }) => {
       </div>
     </div>
   );
-}
+};
 
 export default Card;
