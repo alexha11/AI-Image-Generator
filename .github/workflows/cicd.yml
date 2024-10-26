@@ -20,7 +20,7 @@ jobs:
 
   deploy: 
     needs: build
-    runs-on: self-hosted
+    runs-on: [self-hosted, aws-ec2-server]
     steps: 
       - name: pull image from docker hub
         run: docker pull duongha11/serveraigenerator:latest
