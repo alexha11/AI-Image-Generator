@@ -24,6 +24,8 @@ jobs:
     steps: 
       - name: pull image from docker hub
         run: docker pull duongha11/clientaigenerator:latest
+      - name: Delete old container
+        run: docker rm -f client-app-container || true
       - name: run container
-        run: docker run -d -p 4000:4000 --name server-app-container -e MONGO_PASSWORD='${{ secrets.MONGO_PASSWORD }}' duongha11/clientaigenerator:latest
+        run: docker run -d -p 3000:80 --name client-app-container duongha11/clientaigenerator:latest
 
