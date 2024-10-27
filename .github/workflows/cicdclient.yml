@@ -14,16 +14,16 @@ jobs:
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Build Docker Image
-        run: docker build -t duongha11/serveraigenerator -f server/Dockerfile server
+        run: docker build -t duongha11/clientaigenerator --build-arg VITE_PASSWORD='${{ secrets.VITE_PASSWORD }}' -f client/Dockerfile client
       - name: Push Docker Image
-        run: docker push duongha11/serveraigenerator:latest 
+        run: docker push duongha11/clientaigenerator:latest 
 
   deploy: 
     needs: build
-    runs-on: [self-hosted, aws-ec2-server]
+    runs-on: self-hosted
     steps: 
       - name: pull image from docker hub
-        run: docker pull duongha11/serveraigenerator:latest
+        run: docker pull duongha11/clientaigenerator:latest
       - name: run container
-        run: docker run -d -p 4000:4000 --name server-app-container -e MONGO_PASSWORD='${{ secrets.MONGO_PASSWORD }}' duongha11/serveraigenerator:latest
+        run: docker run -d -p 4000:4000 --name server-app-container -e MONGO_PASSWORD='${{ secrets.MONGO_PASSWORD }}' duongha11/clientaigenerator:latest
 
