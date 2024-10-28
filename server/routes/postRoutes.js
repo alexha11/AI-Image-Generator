@@ -1,6 +1,7 @@
 import express from 'express';
 import * as dotenv from 'dotenv';
 import {v2 as cloudinary} from 'cloudinary';
+import sharp from 'sharp';
 
 import Post from '../mongodb/models/post.js';
 import User from '../mongodb/models/user.js';
@@ -17,6 +18,10 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
+function isBase64Image(photo) {
+  const base64Regex = /^data:image\/[a-zA-Z]+;base64,[A-Za-z0-9+/=]+$/;
+  return base64Regex.test(photo);
+}
 
 router.route('/').get(async (req, res) => {
   try {
@@ -33,17 +38,52 @@ router.route('/').get(async (req, res) => {
 router.route('/').post(async (req, res) => {
   try {
     const { name, prompt, photo } = req.body;
+
+    if (!name || !prompt || !photo) {
+      return res.status(400).json({ success: false, message: 'Name, prompt, and photo are required' });
+    }
+
+    if (!req.user) {
+      return res.status(401).json({ success: false, message: 'Unauthorized' });
+    }
     
-    const photoUrl = await cloudinary.uploader.upload(photo)
-    
+    let photoUrl;
+
+    // Function to resize image from URL
+    async function resizeAndUploadImage(imageUrl) {
+      const response = await fetch(imageUrl);
+      const buffer = await response.buffer();
+
+      // Resize using sharp
+      const resizedBuffer = await sharp(buffer)
+        .resize(256, 256) // Resize to 256x256
+        .toBuffer();
+
+      // Upload the resized image buffer to Cloudinary
+      const uploadedImage = await cloudinary.uploader.upload_stream({
+        resource_type: 'image',
+      }, resizedBuffer);
+
+      return uploadedImage.secure_url;
+    }
+
+    if (isBase64Image(photo)) {
+      // If the photo is in base64 format, upload directly to Cloudinary
+      const uploadedImage = await cloudinary.uploader.upload(photo);
+      photoUrl = uploadedImage.secure_url;
+    } else {
+      // Resize and upload the URL image
+      photoUrl = await resizeAndUploadImage(photo);
+    }
+
     const newPost = await Post.create({
       name,
       prompt,
-      photo: photoUrl.url,
+      photo: photoUrl,
       love: 0,
       user: req.user.id,
     });
-    console.log('post id' , newPost);
+
     const user = await User.findById(req.user.id);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
@@ -51,23 +91,19 @@ router.route('/').post(async (req, res) => {
     user.createdPosts.push(newPost.id);
     await user.save();
 
-
     if (!newPost) {
       return res.status(400).json({ success: false, message: 'Post not created' });
     } 
     if (!photoUrl) {
       return res.status(400).json({ success: false, message: 'Photo not uploaded' });
     }
-    if (!user) {
-      return res.status(400).json({ success: false, message: 'User not found' });
-    }
-
 
     res.status(201).json({ success: true, data: newPost });
   } catch (error) {
-    res.status(500).json({ success: false, data: error});
+    console.error("Error:", error);
+    res.status(500).json({ success: false, data: error });
   }
-})
+});
 
 router.route('/:id').delete(async (req, res) => {
   try {
@@ -141,7 +177,6 @@ router.post('/:id/love', async (req, res) => {
       post.love += 1;
     }
    
-
     await user.save();
     await post.save();
     
@@ -149,9 +184,8 @@ router.post('/:id/love', async (req, res) => {
       post,
       isLovedByUser: !isLoved,
     });
-    console.log('post', post);
   } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: 'Error in toggling love count' });
   }
 });
 

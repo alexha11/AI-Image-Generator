@@ -5,8 +5,8 @@ import cors from 'cors';
 import connectDB from './mongodb/connect.js';
 import postRoutes from './routes/postRoutes.js';
 import dalleRoutes from './routes/dalleRoutes.js'; 
-import countRoutes from './routes/countRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import searchRoutes from './routes/searchRoutes.js';
 
 import middleware from './utils/middleware.js'
 import logger from './utils/logger.js';
@@ -40,8 +40,8 @@ app.use(middleware.requestLogger);
 
 app.use('/api/v1/post', middleware.userExtractor, postRoutes);
 app.use('/api/v1/dalle', dalleRoutes);
-app.use('/api/v1/count', countRoutes);
 app.use('/api/v1/user', userRoutes);
+app.use('/api/v1/search', searchRoutes);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
