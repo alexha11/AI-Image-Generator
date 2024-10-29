@@ -105,7 +105,7 @@ const CreatePost = () => {
 
           setImagesData(data.response.images);
 
-          
+          console.log(imagesData);
           const randomIndex = Math.floor(Math.random() * imagesData.length)
           
           const src = imagesData[randomIndex].source?.page; 
@@ -217,9 +217,12 @@ const CreatePost = () => {
           <p className="mt-2 text-[#666e75] text-[14px] max-w-[500px]">{selectedOption === 'ImageGPT Dall-e-2' ? headerOptions[0].subheader : headerOptions[1].subheader}</p>
         </div>
         <div className="relative w-64 mt-4">
+          <label className="absolute top-[-11px] left-1 bg-white px-1 text-[10px] text-gray-500">
+            Select Engine
+          </label>
           <button
             onClick={toggleDropdown}
-            className="flex items-center justify-between w-full px-4 py-3 text-[#666e75] bg-[#f9fafe] rounded-lg shadow-md focus:outline-none"
+            className="flex items-center justify-between w-full px-4 py-3 text-[#666e75] text-[14px] bg-[#f9fafe] rounded-lg shadow-md focus:outline-none"
           >
             <span>{selectedOption}</span>
             {
@@ -239,8 +242,8 @@ const CreatePost = () => {
                   onClick={() => handleOptionClick(option)}
                   className={`flex flex-col items-start w-full px-4 py-3 text-left text-gray-800 ${option.working ? 'hover:bg-gray-100' : 'pointer-events-none bg-gray-50'} focus:outline-none`}
                 >
-                  <span className="font-semibold ">{option.label}</span>
-                  <span className="text-sm text-gray-500">{option.description}</span>
+                  <span className="font-semibold text-[14px] ">{option.label}</span>
+                  <span className="text-[13px] text-gray-500">{option.description}</span>
                 </button>
               ))}
             </div>
@@ -292,7 +295,7 @@ const CreatePost = () => {
         </div>
         <div className='mt-5 flex items-center gap-5'> 
             <button
-              className="linear flex flex-row items-center rounded-xl bg-green-500 px-5 py-2.5 text-sm font-medium text-white transition duration-200 hover:bg-green-600 active:bg-green-700 dark:bg-green-400 dark:text-white dark:hover:bg-green-300 dark:active:bg-green-200"
+              className="linear flex flex-row items-center rounded-md bg-green-500 px-5 py-2.5 text-sm font-medium text-white transition duration-200 hover:bg-green-600 active:bg-green-700 dark:bg-green-400 dark:text-white dark:hover:bg-green-300 dark:active:bg-green-200"
               data-ripple-light
               onClick={generateImage}
               type='button'
@@ -300,12 +303,13 @@ const CreatePost = () => {
               <svg
                 className="mr-2 fill-white"
                 xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
+                viewBox="0 0 24 24"
                 height="16"
                 width="16"
               >
-                <path d="M7.979 14.771Q7.792 14.771 7.615 14.698Q7.438 14.625 7.271 14.458L3.75 10.938Q3.458 10.646 3.469 10.219Q3.479 9.792 3.771 9.5Q4.062 9.208 4.49 9.208Q4.917 9.208 5.188 9.5L8.021 12.333L14.833 5.521Q15.104 5.229 15.521 5.229Q15.938 5.229 16.229 5.521Q16.5 5.812 16.5 6.219Q16.5 6.625 16.229 6.917L8.688 14.458Q8.521 14.625 8.344 14.698Q8.167 14.771 7.979 14.771Z" />
+                <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 .34-.03.67-.08 1h2.02c.05-.33.06-.66.06-1 0-4.42-3.58-8-8-8zm-6 6c0-.34.03-.67.08-1H3.98c-.05.33-.06.66-.06 1 0 4.42 3.58 8 8 8v3l4-4-4-4v3c-3.31 0-6-2.69-6-6z" />
               </svg>
+
               {generatingText ? 'Generating...' : 'Generate'}
             </button>
             <p className='text-[#222629] text-[14px] inline'>Limit per reset: {count !== -1 ? <div>{count} / 5</div> : <p>Loading...</p>}</p>
@@ -315,6 +319,16 @@ const CreatePost = () => {
           <button
             type='submit'
             className='text-white bg-[#4681f4] hover:bg-[#5783db] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center mt-5'>
+              <svg
+                className="mr-2 fill-white inline-block"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                height="16"
+                width="16"
+              >
+                <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a3.012 3.012 0 0 0 0-1.4l7.05-4.11a2.99 2.99 0 1 0-1.05-1.81l-7.05 4.11a3.012 3.012 0 1 0 0 4.8l7.05 4.11c.5-.46 1.19-.77 1.95-.77a3 3 0 1 0 0-6z" />
+              </svg>
+
               {loading ? 'Sharing...' : 'Share with the community'}
           </button>
         </div>

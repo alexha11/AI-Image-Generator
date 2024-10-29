@@ -1,14 +1,14 @@
 import express from 'express';
 import * as dotenv from 'dotenv';
-import {v2 as cloudinary} from 'cloudinary';
+import { v2 as cloudinary } from 'cloudinary';
 import sharp from 'sharp';
+import fetch from 'node-fetch'; 
+import streamifier from 'streamifier'; 
 
 import Post from '../mongodb/models/post.js';
 import User from '../mongodb/models/user.js';
 
-
 dotenv.config();
-
 
 const router = express.Router();
 
@@ -30,10 +30,10 @@ router.route('/').get(async (req, res) => {
     res.status(200).json({ success: true, data: posts });
     
   } catch (error) {
-    res.status(500).json({ success: false, data: error});
     console.error(error);
+    res.status(500).json({ success: false, data: error.message }); // Changed to error.message
   }
-})
+});
 
 router.route('/').post(async (req, res) => {
   try {
@@ -52,7 +52,8 @@ router.route('/').post(async (req, res) => {
     // Function to resize image from URL
     async function resizeAndUploadImage(imageUrl) {
       const response = await fetch(imageUrl);
-      const buffer = await response.buffer();
+      const arrayBuffer = await response.arrayBuffer(); // Changed from response.buffer() to response.arrayBuffer()
+      const buffer = Buffer.from(arrayBuffer);
 
       // Resize using sharp
       const resizedBuffer = await sharp(buffer)
@@ -60,9 +61,18 @@ router.route('/').post(async (req, res) => {
         .toBuffer();
 
       // Upload the resized image buffer to Cloudinary
-      const uploadedImage = await cloudinary.uploader.upload_stream({
-        resource_type: 'image',
-      }, resizedBuffer);
+      const uploadedImage = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { resource_type: 'image' },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+
+        // Create a readable stream from the buffer and pipe it into the upload stream
+        streamifier.createReadStream(resizedBuffer).pipe(uploadStream);
+      });
 
       return uploadedImage.secure_url;
     }
@@ -101,7 +111,7 @@ router.route('/').post(async (req, res) => {
     res.status(201).json({ success: true, data: newPost });
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).json({ success: false, data: error });
+    res.status(500).json({ success: false, data: error.message }); // Changed to error.message
   }
 });
 
@@ -111,50 +121,13 @@ router.route('/:id').delete(async (req, res) => {
     res.status(200).json({ success: true, data: post });
   }
   catch (error) {
-    res.status(500).json({ success: false, data: error});
+    console.error(error);
+    res.status(500).json({ success: false, data: error.message }); // Changed to error.message
   }
-})
+});
 
-// router.put('/:id', async (req, res) => {
-//   try {
-//     const { name, prompt, photo, love } = req.body;  
+// Rest of your code remains the same...
 
-//     const updatedPost = {
-//       name: name,
-//       prompt: prompt,
-//       photo: photo,
-//       love: love,
-//     };
-
-//     const post = await Post.findByIdAndUpdate(req.params.id, updatedPost, {
-//       new: true,
-//       runValidators: true,
-//     });
-
-//     if (!post) {
-//       return res.status(404).json({ success: false, message: 'Post not found' });
-//     }
-
-//     const user = await User.findById(req.user.id);
-//     if (!user) {
-//       return res.status(404).json({ error: 'User not found' });
-//     }
-
-//     if (!user.lovedPosts.includes(req.params.id)) {
-//       user.lovedPosts.push(req.params.id);
-//       await user.save();
-//     }
-//     // } else {
-//     //   user.LovedPosts = user.LovedPosts.filter((post) => post !== req.params.id);
-//     //   await user.save();
-//     // }
-
-//     res.status(200).json({ success: true, data: post });
-//   } catch (error) {
-//     console.error('Error updating post:', error);
-//     res.status(500).json({ success: false, data: error.message });
-//   }
-// });
 router.post('/:id/love', async (req, res) => {
   const postId = req.params.id;
   const userId = req.user.id;
@@ -168,7 +141,6 @@ router.post('/:id/love', async (req, res) => {
 
     const isLoved = user.lovedPosts.includes(postId);
     
-   
     if (isLoved) {
       user.lovedPosts.pull(postId);
       post.love -= 1;
@@ -185,6 +157,7 @@ router.post('/:id/love', async (req, res) => {
       isLovedByUser: !isLoved,
     });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Error in toggling love count' });
   }
 });
