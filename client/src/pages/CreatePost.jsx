@@ -103,29 +103,22 @@ const CreatePost = () => {
         else {
           const data = await searchService.search(form.prompt);
 
+          console.log('checking data', data.response.images);
           setImagesData(data.response.images);
 
           console.log(imagesData);
           const randomIndex = Math.floor(Math.random() * imagesData.length)
           
-          const src = imagesData[randomIndex].source?.page; 
+          // const src = imagesData[randomIndex].source?.page; 
           const img = imagesData[randomIndex].image?.url;
           const thumbnail = imagesData[randomIndex].thumbnail?.url;
 
           
-          console.log(src);
+          // console.log(src);
           console.log(img);
           console.log(thumbnail);
 
-          if (isImage(img)) {
-            url = img;
-          }
-          else if (isImage(thumbnail)) {
-            url = thumbnail;
-          }
-          else {
-            url = 'https://res.cloudinary.com/ddfq0pl1q/image/upload/v1730129418/sorry-image-not-available_bawgbg.jpg';
-          }
+          const url = isImage(img) ? img : thumbnail;
 
           setForm({ ...form, photo: url });
         }
@@ -217,7 +210,7 @@ const CreatePost = () => {
           <p className="mt-2 text-[#666e75] text-[14px] max-w-[500px]">{selectedOption === 'ImageGPT Dall-e-2' ? headerOptions[0].subheader : headerOptions[1].subheader}</p>
         </div>
         <div className="relative w-64 mt-4">
-          <label className="absolute top-[-11px] left-1 bg-white px-1 text-[10px] text-gray-500">
+          <label className="absolute top-[-11px] left-1 px-1 text-[10px] text-gray-500">
             Select Engine
           </label>
           <button
