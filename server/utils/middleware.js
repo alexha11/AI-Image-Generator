@@ -8,11 +8,11 @@ const requestLogger = (req, res, next) => {
   logger.info('Token:', req.token);
   logger.info('---');
   next();
-}
+};
 
 const unknownEndpoint = (req, res) => {
   res.status(404).send({ error: 'unknown endpoint' });
-}
+};
 
 const errorHandler = (error, req, res, next) => {
   logger.error(error.message);
@@ -24,7 +24,7 @@ const errorHandler = (error, req, res, next) => {
   }
 
   next(error);
-}
+};
 
 const tokenExtractor = (req, res, next) => {
   const authorization = req.get('authorization');
@@ -35,7 +35,7 @@ const tokenExtractor = (req, res, next) => {
   }
   logger.info('Token: after extract', req.token);
   next();
-}
+};
 
 const userExtractor = (req, res, next) => {
   const token = req.token;
@@ -50,12 +50,12 @@ const userExtractor = (req, res, next) => {
 
   req.user = decodedToken;
   next();
-}
+};
 
 export default {
   requestLogger,
   unknownEndpoint,
-  errorHandler, 
+  errorHandler,
   tokenExtractor,
   userExtractor,
-}
+};
