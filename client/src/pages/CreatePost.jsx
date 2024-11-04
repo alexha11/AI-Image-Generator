@@ -96,22 +96,21 @@ const CreatePost = () => {
           return;
         }
         setGeneratingText(true);
+
         if (selectedOption === 'ImageGPT Dall-e-2') {
           const data = await dalleService.generate(form.prompt);
           setForm({ ...form, photo:  'data:image/jpeg;base64,' + data.photo });
         }
         else {
           const data = await searchService.search(form.prompt);
+          const imagesDataResponse = data.response.images;
+          setImagesData(imagesDataResponse);
 
-          console.log('checking data', data.response.images);
-          setImagesData(data.response.images);
-
-          console.log(imagesData);
-          const randomIndex = Math.floor(Math.random() * imagesData.length)
+          const randomIndex = Math.floor(Math.random() * imagesDataResponse.length)
           
           // const src = imagesData[randomIndex].source?.page; 
-          const img = imagesData[randomIndex].image?.url;
-          const thumbnail = imagesData[randomIndex].thumbnail?.url;
+          const img = imagesDataResponse[randomIndex].image?.url;
+          const thumbnail = imagesDataResponse[randomIndex].thumbnail?.url;
 
           
           // console.log(src);
@@ -129,7 +128,16 @@ const CreatePost = () => {
 
         succesNoti('Image generated successfully');
       } catch (error) {
-        console.log(error);
+        if (error.status === 401) {
+          alert('Please login to generate or search an image');
+        }
+        if (error.status === 400) {
+          alert('Prompt is required');
+        }
+        if (error.status === 500) {
+          alert('Error generating image');
+        }
+        console.error('Error generating image:', error);
     }
     finally {
       setGeneratingText(false);
@@ -187,12 +195,12 @@ const CreatePost = () => {
     }
     const randomIndex = Math.floor(Math.random() * imagesData.length)
     
-    const src = imagesData[randomIndex].source.page; 
+    // const src = imagesData[randomIndex].source.page; 
     const img = imagesData[randomIndex].image.url;
     const thumbnail = imagesData[randomIndex].thumbnail.url;
           
 
-    console.log(src);
+    // console.log(src);
     console.log(img);
     console.log(thumbnail);
 
@@ -348,11 +356,22 @@ const CreatePost = () => {
                 handleChange={(e) => setPassword(e.target.value)}
               />
               <button
-                type='button'
-                className='text-white bg-[#5adbb5] hover:bg-[#5dbea3] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center mt-5'
-                onClick={checkPassword}
+              className="linear mt-4 flex flex-row items-center rounded-md bg-green-500 px-5 py-2.5 text-sm font-medium text-white transition duration-200 hover:bg-green-600 active:bg-green-700 dark:bg-green-400 dark:text-white dark:hover:bg-green-300 dark:active:bg-green-200"
+              data-ripple-light
+              onClick={checkPassword}
+              type='button'
+              >
+                <svg
+                  className="mr-2 fill-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  height="16"
+                  width="16"
                 >
-                  Reset
+                  <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 .34-.03.67-.08 1h2.02c.05-.33.06-.66.06-1 0-4.42-3.58-8-8-8zm-6 6c0-.34.03-.67.08-1H3.98c-.05.33-.06.66-.06 1 0 4.42 3.58 8 8 8v3l4-4-4-4v3c-3.31 0-6-2.69-6-6z" />
+                </svg>
+
+                Reset
               </button>
             </div>
           )

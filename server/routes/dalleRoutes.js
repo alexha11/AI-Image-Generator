@@ -20,6 +20,11 @@ router.route('/').post(async (req, res) => {
   try {
     const { prompt } = req.body;
 
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
     if (!prompt) {
       return res.status(400).json({ error: 'Prompt is required' }); 
     }

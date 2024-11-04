@@ -39,9 +39,9 @@ app.use(middleware.tokenExtractor);
 app.use(middleware.requestLogger);
 
 app.use('/api/v1/post', middleware.userExtractor, postRoutes);
-app.use('/api/v1/dalle', dalleRoutes);
+app.use('/api/v1/dalle', middleware.userExtractor, dalleRoutes);
 app.use('/api/v1/user', userRoutes);
-app.use('/api/v1/search', searchRoutes);
+app.use('/api/v1/search', middleware.userExtractor, searchRoutes);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);

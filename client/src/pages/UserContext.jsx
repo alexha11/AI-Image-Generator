@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { postService } from '../services';
+import { searchService, dalleService } from '../services';
 import { userService } from '../services';
 
 export const UserContext = createContext();
@@ -13,7 +14,10 @@ export const UserProvider = ({ children }) => {
 
       if (loggedUserJSON) {
         const userData = JSON.parse(loggedUserJSON);
+        
         postService.setToken(userData.token);
+        searchService.setToken(userData.token);
+        dalleService.setToken(userData.token);
 
         const userById = await userService.getById(userData.id);
         setUser({ ...userData, lovedPosts: userById.data.lovedPosts });
