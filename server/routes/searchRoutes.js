@@ -2,6 +2,8 @@ import axios from 'axios';
 import express from 'express';
 import dotenv from 'dotenv';
 
+import logger from '../utils/logger.js';
+
 dotenv.config();
 
 const router = express.Router();
@@ -32,10 +34,10 @@ router.route('/').post(async (req, res) => {
 
   try {
     const response = await axios.request(options);
-    console.log(response.data);
+    logger.info(response.data);
     res.status(200).json(response.data); // Send data back to client
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).json({ error: 'Failed to fetch data' });
   }
 });

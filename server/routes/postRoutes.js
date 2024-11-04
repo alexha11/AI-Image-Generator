@@ -7,6 +7,7 @@ import streamifier from 'streamifier';
 
 import Post from '../mongodb/models/post.js';
 import User from '../mongodb/models/user.js';
+import logger from '../utils/logger.js';
 
 dotenv.config();
 
@@ -30,7 +31,7 @@ router.route('/').get(async (req, res) => {
     res.status(200).json({ success: true, data: posts });
     
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).json({ success: false, data: error.message }); // Changed to error.message
   }
 });
@@ -110,7 +111,7 @@ router.route('/').post(async (req, res) => {
 
     res.status(201).json({ success: true, data: newPost });
   } catch (error) {
-    console.error("Error:", error);
+    logger.error(error);
     res.status(500).json({ success: false, data: error.message }); // Changed to error.message
   }
 });
@@ -121,7 +122,7 @@ router.route('/:id').delete(async (req, res) => {
     res.status(200).json({ success: true, data: post });
   }
   catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).json({ success: false, data: error.message }); // Changed to error.message
   }
 });
@@ -157,7 +158,7 @@ router.post('/:id/love', async (req, res) => {
       isLovedByUser: !isLoved,
     });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).json({ error: 'Error in toggling love count' });
   }
 });

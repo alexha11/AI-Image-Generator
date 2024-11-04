@@ -22,10 +22,20 @@ jobs:
     needs: build
     runs-on: self-hosted
     steps: 
-      - name: pull image from docker hub
+      - name: Pull Image from Docker Hub
         run: docker pull duongha11/serveraigenerator:latest
-      - name: Delete old container
+      - name: Delete Old Container
         run: docker rm -f server-app-container || true
-      - name: run container
-        run: docker run -d -p 4000:4000 --name server-app-container -e MONGO_PASSWORD='${{ secrets.MONGO_PASSWORD }}' duongha11/serveraigenerator:latest
-
+      - name: Run Container with Environment Variables
+        run: |
+          docker run -d -p 4000:4000 --name server-app-container \
+            -e MONGODB_URI_DEV='${{ secrets.MONGODB_URI_DEV }}' \
+            -e TEST_MONGODB_URI='${{ secrets.TEST_MONGODB_URI }}' \
+            -e OPENAI_API_KEY='${{ secrets.OPENAI_API_KEY }}' \
+            -e PORT='${{ secrets.PORT }}' \
+            -e CLOUDINARY_CLOUD_NAME='${{ secrets.CLOUDINARY_CLOUD_NAME }}' \
+            -e CLOUDINARY_API_KEY='${{ secrets.CLOUDINARY_API_KEY }}' \
+            -e CLOUDINARY_API_SECRET='${{ secrets.CLOUDINARY_API_SECRET }}' \
+            -e SECRET='${{ secrets.SECRET }}' \
+            -e SEARCH_API_KEY='${{ secrets.SEARCH_API_KEY }}' \
+            duongha11/serveraigenerator:latest

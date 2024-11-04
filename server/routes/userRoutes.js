@@ -2,7 +2,9 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import express from 'express';
 import * as dotenv from 'dotenv';
+
 import User from '../mongodb/models/user.js';
+import logger from '../utils/logger.js';
 
 const router = express.Router();
 
@@ -102,6 +104,7 @@ router.route('/login').post(async (req, res) => {
     const token = jwt.sign(userForToken, process.env.SECRET);
     res.status(200).send({ token, email: user.email, username: user.username, id: user._id, lovedPosts: user.lovedPosts });
   } catch (error) {
+    logger.info('testing');
     res.status(500).json({ success: false, message: error.message });
   };
 });
