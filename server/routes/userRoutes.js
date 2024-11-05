@@ -27,7 +27,7 @@ router.route('/:id').get(async (req, res) => {
   res.status(200).json({ success: true, data: user });
 });
 
-router.route('/').post(async (req, res) => {
+router.route('/register').post(async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
@@ -48,8 +48,8 @@ router.route('/').post(async (req, res) => {
       return res.status(400).json({ success: false, message: 'Invalid email' });
     }
 
-    if (email.length > 20) {
-      return res.status(400).json({ success: false, message: 'Email must be at most 20 characters long' });
+    if (email.length > 50) {
+      return res.status(400).json({ success: false, message: 'Email must be at most 50 characters long' });
     }
 
     if (username.length < 3) {

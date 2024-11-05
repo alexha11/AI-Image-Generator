@@ -17,7 +17,7 @@ import { searchService } from '../services';
 import { UserContext } from './UserContext';
  
 const CreatePost = () => {
-  const { user } = useContext(UserContext);
+  const { user, setTokenDalle, setTokenSearch, setTokenPost, userID } = useContext(UserContext);
   const navigate = useNavigate();
   const [form, setForm] = useState({
     name: '',
@@ -49,6 +49,9 @@ const CreatePost = () => {
           setForm({ ...form, name: user.username });
           const data = await userService.getById(user.id);
           setCount(data.data.count);
+          setTokenDalle();
+          setTokenSearch();
+          setTokenPost();
         }
        
       }
@@ -149,6 +152,10 @@ const CreatePost = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!user) {
+      alert('Please login to share an image');
+      return;
+    }
 
     if (form.prompt && form.photo) {
       try {

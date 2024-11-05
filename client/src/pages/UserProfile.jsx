@@ -4,7 +4,7 @@ import { postService, userService } from '../services';
 import { heart } from '../assets';
 
 const UserProfile = () => {
-  const { user } = useContext(UserContext);
+  const { user, setTokenPost} = useContext(UserContext);
 
   const [loveReceived, setLoveReceived] = useState(0);
   const [createdPostSortedByLove, setCreatedPostSortedByLove] = useState(null);
@@ -17,11 +17,12 @@ const UserProfile = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
+        console.log('first user', user);
         const loggedUserJSON = window.localStorage.getItem('loggedAIAppUser');
         if (loggedUserJSON) {
           const user = JSON.parse(loggedUserJSON);
-          postService.setToken(user.token);
-
+          
+          setTokenPost(user.token);
           const userById = await userService.getById(user.id);
           
           console.log(userById);

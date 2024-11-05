@@ -5,7 +5,7 @@ import { logo } from './assets';
 import { Home, CreatePost, UserProfile } from './pages';
 import Login from './pages/Login';
 import { UserContext } from './pages/UserContext'; 
-import { postService } from './services';
+import { postService, searchService, dalleService } from './services';
 
 const App = () => {
   const { user, setUser } = useContext(UserContext); // Access setUser from UserContext
@@ -98,12 +98,13 @@ const App = () => {
                 {user ? (
                   <li>
                     <Link
-                      to="/login"
+                      to="/"
                       onClick={() => {
                         setUser(null);
                         window.localStorage.removeItem('loggedAIAppUser');
                         postService.setToken(''); 
-                        set
+                        searchService.setToken('');
+                        dalleService.setToken('');
                         toggleDropdown();
                       }}
                       className="text-[#222629] text-sm hover:bg-gray-200 p-2 rounded-md block"

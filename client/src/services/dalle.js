@@ -24,4 +24,4 @@ const generate = async (prompt) => {
   return response.data;
 }
 
-export default { getAll, generate };
+export default { setToken, getAll, generate };

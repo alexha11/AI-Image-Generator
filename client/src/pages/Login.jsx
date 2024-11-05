@@ -75,14 +75,15 @@ const Login = () => {
       successNoti('User registered successfully');
       console.log(data);
     } catch (error) {
-      console.error('Error registering user:', error);
-      errorNoti('Error registering user');
+      console.error('Error registering user:', error.response.data.message);
+      errorNoti(error.response.data.message);
     }
     setUsername('');
     setEmail('');
     setPassword('');
     setPasswordConfirm('');
     setIsShowRegister(false);
+    setShowPassword(false);
   };
 
   const handleSubmitLogin = async (e) => {
@@ -125,7 +126,7 @@ const Login = () => {
           </form>
           <p className="flex justify-end text-[14px] text-gray-500 gap-1 tracking-tighter mt-1">
             Don't have an account?
-            <button onClick={() => { setIsShowRegister(true) }} className='text-blue-500'>Register</button>
+            <button onClick={() => { setIsShowRegister(true); setShowPassword(false);}} className='text-blue-500'>Register</button>
           </p>
         </div>
       </div>
