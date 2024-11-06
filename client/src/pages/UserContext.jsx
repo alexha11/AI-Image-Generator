@@ -10,8 +10,11 @@ export const UserProvider = ({ children }) => {
     return savedUser ? JSON.parse(savedUser) : null;
   });
 
+  useEffect(() => {
+    window.localStorage.setItem('loggedAIAppUser', JSON.stringify(user));
+  }
+  , [user]);
   
-
   const setTokenPost = (token) => {
     postService.setToken(token);
   };

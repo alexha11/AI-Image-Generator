@@ -18,7 +18,7 @@ import { UserContext } from './UserContext';
 
 
 const CreatePost = () => {
-  const { user, setTokenDalle, setTokenSearch, setTokenPost } = useContext(UserContext);
+  const { user, setTokenDalle, setTokenSearch, setTokenPost, setUser } = useContext(UserContext);
   const navigate = useNavigate();
   const [form, setForm] = useState({
     name: '',
@@ -134,7 +134,10 @@ const CreatePost = () => {
         }
         setGeneratingText(false);
         setCount(count + 1);
-        console.log(user.id);
+        setUser({
+          ...user,
+          count: count + 1,
+        });
         await userService.updateCount(user.id, count + 1);
 
         succesNoti('Image generated successfully');
@@ -170,6 +173,11 @@ const CreatePost = () => {
         setLoading(true);
         const data = await postService.create(form);
         console.log(data);
+        setUser({
+          ...user,
+          createdPosts: [...user.createdPosts, data.data],
+          });
+       
         navigate('/');
         succesNoti('Image shared successfully');
 
@@ -198,6 +206,10 @@ const CreatePost = () => {
       await userService.updateCount(user.id, 0);
       setReset(false);
       setPassword('');
+      setUser({
+        ...user,
+        count: 0,
+      });
     } else {
       errorNoti();
     }

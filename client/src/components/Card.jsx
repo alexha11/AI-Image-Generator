@@ -35,6 +35,9 @@ const Card = ({ _id, name, prompt, photo, love, onLoveUpdate }) => {
         lovedPosts: loved
           ? user.lovedPosts.concat(updatedPost)
           : user.lovedPosts.filter((post) => post._id !== updatedPost._id),
+        createdPosts: user.createdPosts.map(post =>
+          post._id === updatedPost._id ? updatedPost : post
+        )
       });
     } catch (error) {
       alert('Failed to love the post');

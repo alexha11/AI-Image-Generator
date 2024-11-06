@@ -18,19 +18,16 @@ const UserProfile = () => {
     const fetchPosts = async () => {
       try {
         setTokenPost(user.token);
-
+  
         const createdPost = user.createdPosts;
         const lovedPost = user.lovedPosts;
-
-        console.log('createdPost', createdPost);
-        console.log('lovedPost', lovedPost);
-
+  
         setLoveReceived(createdPost.reduce((acc, post) => acc + post.love, 0));
-        setCreatedPostSortedByLove(createdPost.sort((a, b) => b.love - a.love));
+        setCreatedPostSortedByLove([...createdPost].sort((a, b) => b.love - a.love)); // Copy to avoid mutating state
         setPostCount(createdPost.length);
         setLovePostCount(lovedPost.length);
         setLovedPost(lovedPost);
-        
+  
       } catch (error) {
         console.log(error);
       } finally {
@@ -38,10 +35,9 @@ const UserProfile = () => {
       }
     };
   
-    fetchPosts();
-  }, []);
+    if (user) fetchPosts(); // Only call fetch if user exists
+  }, [user, setTokenPost]);  // Add user as a dependency
   
-
   if (loading || !user) {  // Wait for user to load and loading to finish
     return <div>Loading the information of user ...</div>;
   }
