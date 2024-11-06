@@ -15,9 +15,10 @@ import { userService } from '../services';
 import { dalleService } from '../services';
 import { searchService } from '../services';
 import { UserContext } from './UserContext';
- 
+
+
 const CreatePost = () => {
-  const { user, setTokenDalle, setTokenSearch, setTokenPost, userID } = useContext(UserContext);
+  const { user, setTokenDalle, setTokenSearch, setTokenPost } = useContext(UserContext);
   const navigate = useNavigate();
   const [form, setForm] = useState({
     name: '',
@@ -42,17 +43,24 @@ const CreatePost = () => {
   useEffect(() => {
     const fetchCount = async () => {
       try {
-        const loggedUserJSON = window.localStorage.getItem('loggedAIAppUser');
+        // const loggedUserJSON = window.localStorage.getItem('loggedAIAppUser');
 
-        if (loggedUserJSON) {
-          const user = JSON.parse(loggedUserJSON);
-          setForm({ ...form, name: user.username });
-          const data = await userService.getById(user.id);
-          setCount(data.data.count);
-          setTokenDalle();
-          setTokenSearch();
-          setTokenPost();
-        }
+        // if (loggedUserJSON) {
+        //   const user = JSON.parse(loggedUserJSON);
+        //   setForm({ ...form, name: user.username });
+        //   const data = await userService.getById(user.id);
+        //   setCount(data.data.count);
+        //   setTokenDalle(user.token);
+        //   setTokenSearch(user.token);
+        //   setTokenPost(user.token);
+        // }
+        console.log('user', user);
+        setForm({ ...form, name: user.username });
+        setCount(user.count);
+        setTokenDalle(user.token);
+        setTokenSearch(user.token);
+        setTokenPost(user.token);
+
        
       }
       catch (error) {

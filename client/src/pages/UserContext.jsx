@@ -1,47 +1,31 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { postService } from '../services';
-import { searchService, dalleService } from '../services';
-import { userService } from '../services';
+import { postService, searchService, dalleService, userService } from '../services';
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [userID, setUserID] = useState(null);
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const loggedUserJSON = window.localStorage.getItem('loggedAIAppUser');
+  const [user, setUser] = useState(() => {
+    const savedUser = window.localStorage.getItem('loggedAIAppUser');
+    console.log('savedUser', savedUser);
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
 
-      if (loggedUserJSON) {
-        const userData = JSON.parse(loggedUserJSON);
-        const userById = await userService.getById(userData.id);
-        
-        setUserID(userById)
-        setUser({ ...userData, lovedPosts: userID.data.lovedPosts });
-      }
-    };
-    fetchUserData();
-  }, []);
+  
 
-  const setTokenPost = () => {
-    if (user) {
-      postService.setToken(user.token);
-    }
-  }
-  const setTokenSearch = () => {
-    if (user) {
-      searchService.setToken(user.token);
-    }
-  }
+  const setTokenPost = (token) => {
+    postService.setToken(token);
+  };
 
-  const setTokenDalle = () => {
-    if (user) {
-      dalleService.setToken(user.token);
-    }
-  }
+  const setTokenSearch = (token) => {
+    searchService.setToken(token);
+  };
+
+  const setTokenDalle = (token) => {
+    dalleService.setToken(token);
+  };
 
   return (
-    <UserContext.Provider value={{ user, setUser, setTokenDalle, setTokenPost, setTokenSearch, userID }}>
+    <UserContext.Provider value={{ user, setUser, setTokenDalle, setTokenPost, setTokenSearch }}>
       {children}
     </UserContext.Provider>
   );

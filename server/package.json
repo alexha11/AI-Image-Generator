@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test jest --verbose --runInBand",
+    "test": "NODE_ENV=test jest --config jest.config.js --verbose",
     "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development nodemon index.js",
     "lint": "eslint ."
@@ -32,8 +32,11 @@
     "streamifier": "^0.1.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
     "@eslint/js": "^9.14.0",
     "@stylistic/eslint-plugin-js": "^2.10.1",
+    "babel-jest": "^29.7.0",
     "cross-env": "^7.0.3",
     "eslint": "^9.14.0",
     "globals": "^15.11.0",
@@ -42,5 +45,8 @@
   },
   "jest": {
     "testEnvironment": "node"
+  },
+  "directories": {
+    "test": "test"
   }
 }

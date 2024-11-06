@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Loader, Card, FormField } from "../components";
 import { postService } from "../services";
+import { UserContext } from './UserContext';
 
 const Home = () => {
   const [loading, setLoading] = useState(false );
@@ -8,11 +9,14 @@ const Home = () => {
   const [filteredPosts, setFilteredPosts] = useState(null);
 
   const [searchText, setSearchText] = useState('');
+  const { user, setTokenPost } = useContext(UserContext);
 
   useEffect( () => {
     setLoading(true);
     const fetchPosts = async () => {
       try {
+        console.log('user', user);
+        setTokenPost(user.token);
         const data = await postService.getAll();
         setPosts(data.data.reverse());
         console.log(posts)

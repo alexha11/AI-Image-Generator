@@ -91,7 +91,9 @@ router.route('/login').post(async (req, res) => {
       return res.status(400).json({ success: false, message: 'Email and password are required' });
     };
 
-    const user = await User.findOne ({ email });
+    const user = await User.findOne ({ email })
+      .populate('lovedPosts', { name: 1, prompt: 1, photo: 1, love: 1 })
+      .populate('createdPosts', { name: 1, prompt: 1, photo: 1, love: 1 });
     const passwordCorrect = user === null ? false : await bcrypt.compare(password, user.password);
     if (!(user && passwordCorrect)) {
       return res.status(401).json({ error: 'invalid email or password' });
@@ -102,7 +104,7 @@ router.route('/login').post(async (req, res) => {
     };
 
     const token = jwt.sign(userForToken, process.env.SECRET);
-    res.status(200).send({ token, email: user.email, username: user.username, id: user._id, lovedPosts: user.lovedPosts });
+    res.status(200).send({ token, email: user.email, username: user.username, id: user._id, lovedPosts: user.lovedPosts, createdPosts: user.createdPosts, count: user.count });
   } catch (error) {
     logger.info('testing');
     res.status(500).json({ success: false, message: error.message });

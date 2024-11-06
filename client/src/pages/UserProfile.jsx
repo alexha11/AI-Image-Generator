@@ -17,29 +17,20 @@ const UserProfile = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        console.log('first user', user);
-        const loggedUserJSON = window.localStorage.getItem('loggedAIAppUser');
-        if (loggedUserJSON) {
-          const user = JSON.parse(loggedUserJSON);
-          
-          setTokenPost(user.token);
-          const userById = await userService.getById(user.id);
-          
-          console.log(userById);
+        setTokenPost(user.token);
 
-          const createdPost = userById.data.createdPosts;
-          const lovedPost = userById.data.lovedPosts;
-          
-          console.log(createdPost);
-          console.log(lovedPost);
-          
-          setLoveReceived(createdPost.reduce((acc, post) => acc + post.love, 0));
-          setCreatedPostSortedByLove(createdPost.sort((a, b) => b.love - a.love));
-          setPostCount(createdPost.length);
-          setLovePostCount(lovedPost.length);
+        const createdPost = user.createdPosts;
+        const lovedPost = user.lovedPosts;
 
-          setLovedPost(lovedPost);
-        }
+        console.log('createdPost', createdPost);
+        console.log('lovedPost', lovedPost);
+
+        setLoveReceived(createdPost.reduce((acc, post) => acc + post.love, 0));
+        setCreatedPostSortedByLove(createdPost.sort((a, b) => b.love - a.love));
+        setPostCount(createdPost.length);
+        setLovePostCount(lovedPost.length);
+        setLovedPost(lovedPost);
+        
       } catch (error) {
         console.log(error);
       } finally {

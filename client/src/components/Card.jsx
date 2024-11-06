@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import { UserContext } from '../pages/UserContext';
 
 import { download, heart, unheart } from '../assets';
@@ -10,7 +10,7 @@ const Card = ({ _id, name, prompt, photo, love, onLoveUpdate }) => {
   const { user, setUser } = useContext(UserContext);
   
   const [isLovedByUser, setIsLovedByUser] = useState(
-    user && user.lovedPosts.some((post) => post === _id)
+    user && user.lovedPosts.some((post) => post._id === _id)
   );
   const [loveCount, setLoveCount] = useState(love);
 
@@ -30,13 +30,12 @@ const Card = ({ _id, name, prompt, photo, love, onLoveUpdate }) => {
 
       onLoveUpdate(updatedPost);
       
-      let updatedLovedPostsID; 
-      if (loved) {
-        updatedLovedPostsID = user.lovedPosts.concat(_id);
-      } else {
-        updatedLovedPostsID = user.lovedPosts.filter((post) => post !== _id);
-      }
-      setUser({ ...user, lovedPosts: updatedLovedPostsID });
+      setUser({
+        ...user,
+        lovedPosts: loved
+          ? user.lovedPosts.concat(updatedPost)
+          : user.lovedPosts.filter((post) => post._id !== updatedPost._id),
+      });
     } catch (error) {
       alert('Failed to love the post');
     }
