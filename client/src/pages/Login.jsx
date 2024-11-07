@@ -19,6 +19,7 @@ const Login = () => {
   const [passwordLogin, setPasswordLogin] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordLogin, setShowPasswordLogin] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const successNoti = (text) => {
     toast.success(text, {
@@ -64,6 +65,7 @@ const Login = () => {
 
   const handleSubmitRegister = async (e) => {
     e.preventDefault();
+    setLoading(true);
     if (password !== passwordConfirm) {
       alert('Password and confirm password do not match');
       return;
@@ -84,10 +86,12 @@ const Login = () => {
     setPasswordConfirm('');
     setIsShowRegister(false);
     setShowPassword(false);
+    setLoading(false);
   };
 
   const handleSubmitLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const user = { email: emailLogin, password: passwordLogin };
     try {
       const data = await userService.login(user);
@@ -102,6 +106,8 @@ const Login = () => {
     } catch (error) {
       console.error('Error logging in:', error);
       errorNoti('Wrong credentials');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -120,8 +126,8 @@ const Login = () => {
               <input type='checkbox' id='showPassword' name='showPassword' value={showPasswordLogin} onChange={() => { setShowPasswordLogin(!showPasswordLogin) }} className='mt-3' />
               <label htmlFor='showPassword' className='text-[14px] text-gray-500 ml-2'>Show password</label>
             </div>
-            <button className='text-white bg-[#4681f4] hover:bg-[#5783db] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center mt-3'>
-              Login
+            <button disabled={loading} className='text-white bg-[#4681f4] hover:bg-[#5783db] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center mt-3'>
+              {loading ? 'Loading...' : 'Login'}
             </button>
           </form>
           <p className="flex justify-end text-[14px] text-gray-500 gap-1 tracking-tighter mt-1">
@@ -153,7 +159,7 @@ const Login = () => {
                 <label htmlFor='showPassword' className='text-[14px] text-gray-500 ml-2'>Show password</label>
               </div>
               <button className='text-white bg-[#4681f4] hover:bg-[#5783db] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center mt-5'>
-                Register
+                {loading ? 'Loading...' : 'Register'}
               </button>
             </form>
           </div>

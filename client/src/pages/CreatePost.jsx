@@ -273,7 +273,7 @@ const CreatePost = () => {
                   <span className="font-semibold text-[14px] ">{option.label}</span>
                   <span className="text-[13px] text-gray-500">{option.description}</span>
                 </button>
-              ))}
+              ))} 
             </div>
           )}
         </div>
@@ -327,6 +327,7 @@ const CreatePost = () => {
               data-ripple-light
               onClick={generateImage}
               type='button'
+              disabled={generatingText}
             >
               <svg
                 className="mr-2 fill-white"
@@ -345,6 +346,7 @@ const CreatePost = () => {
         <div className='mt-10'>
           <p className='mt-2 text-[#666e75] text-[14px]'>Once you have created the image you want, you can share it to the community</p>
           <button
+            disabled={loading}
             type='submit'
             className='text-white bg-[#4681f4] hover:bg-[#5783db] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center mt-5'>
               <svg

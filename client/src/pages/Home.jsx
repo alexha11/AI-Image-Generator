@@ -4,7 +4,7 @@ import { postService } from "../services";
 import { UserContext } from './UserContext';
 
 const Home = () => {
-  const [loading, setLoading] = useState(false );
+  const [loading, setLoading] = useState(false);
   const [posts, setPosts] = useState(null);
   const [filteredPosts, setFilteredPosts] = useState(null);
 
@@ -14,6 +14,12 @@ const Home = () => {
   useEffect( () => {
     setLoading(true);
     const fetchPosts = async () => {
+      if (!user) {
+        setLoading(false);
+        setPosts(null);
+        setSearchText('');
+        return;
+      }
       try {
         console.log('user', user);
         setTokenPost(user.token);
@@ -27,7 +33,7 @@ const Home = () => {
       }
     }
     fetchPosts();
-  }, []);
+  }, [user]);
 
   const handleSearch = (e) => {
     e.preventDefault();
