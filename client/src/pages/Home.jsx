@@ -10,7 +10,7 @@ const Home = () => {
 
   const [searchText, setSearchText] = useState('');
   const { user, setTokenPost } = useContext(UserContext);
-
+    
   useEffect( () => {
     setLoading(true);
     const fetchPosts = async () => {
@@ -33,7 +33,7 @@ const Home = () => {
       }
     }
     fetchPosts();
-  }, [user]);
+  }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
