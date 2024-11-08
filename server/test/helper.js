@@ -4,27 +4,17 @@ import User from "../mongodb/models/user.js";
 const initialPosts = [
   {
     name: "Thanh Duong",
-    prompt: "What is your favorite color?",
-    photo: "https://www.google.com",
-    love: 0,
-  },
-  {
-    name: "Thanh Duong",
     prompt: "What is your favorite food?",
     photo: "https://www.google.com",
     love: 0,
+    user: "672df5088ff8d59ed91c92eb",
   },
 ];
 
 const initialUsers = [
   {
-    username: "thanhduong11",
+    username: "thanhduong",
     email: "thanhduonghd1214@gmail.com",
-    password: "testing12345",
-  },
-  {
-    username: "thanhduong12",
-    email: "kookmathi123@gmail.com",
     password: "testing12345",
   },
 ];

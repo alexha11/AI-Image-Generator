@@ -11,10 +11,34 @@ jobs:
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Ensure this matches your Node.js version
+
+      - name: Install Dependencies
+        run: npm install
+        working-directory: ./server  # Change if your package.json is in a different directory
+
+      # Run ESLint for static code analysis
+      - name: Run ESLint
+        run: npx eslint . --ext .js,.jsx --max-warnings=0  # Adjust extensions if needed
+        working-directory: ./server
+
+      # Run Tests
+      - name: Run Tests
+        env:
+          TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}  # Add necessary test environment variables
+        run: npm test
+        working-directory: ./server  # Adjust to your test command and directory
+
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Build Docker Image
         run: docker build -t duongha11/serveraigenerator -f server/Dockerfile server
+
       - name: Push Docker Image
         run: docker push duongha11/serveraigenerator:latest 
 
@@ -24,8 +48,10 @@ jobs:
     steps: 
       - name: Pull Image from Docker Hub
         run: docker pull duongha11/serveraigenerator:latest
+
       - name: Delete Old Container
         run: docker rm -f server-app-container || true
+
       - name: Run Container with Environment Variables
         run: |
           docker run -d -p 4000:4000 --name server-app-container \

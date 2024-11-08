@@ -22,6 +22,7 @@ describe("user api tests", () => {
   );
 
   test("register user", async () => {
+    const usersAtBegin = await helper.usersInDb();
     const newUser = {
       username: "thanhduong11",
       email: "thanhduonghd114@gmail.com",
@@ -31,11 +32,12 @@ describe("user api tests", () => {
     await api
       .post("/api/v1/user/register")
       .send(newUser)
-      .expect(201);
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
     
     const usersAtEnd = await helper.usersInDb();
     console.log(usersAtEnd);
-    expect(usersAtEnd).toHaveLength(1); 
+    expect(usersAtEnd).toHaveLength(usersAtBegin.length + 1); 
     });
 
   test("register user with invalid email", async () => {
