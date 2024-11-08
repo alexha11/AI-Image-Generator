@@ -28,7 +28,7 @@ beforeEach(async () => {
   // token = res.body.token 
 })
 
-beforeEach(async ( )=> {
+beforeEach(async () => {
   const response = await api
       .post('/api/v1/user/login')
       .send({

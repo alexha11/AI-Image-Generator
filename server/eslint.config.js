@@ -14,34 +14,24 @@ export default [
       '@stylistic/js': stylisticJs,
     },
     languageOptions: { 
-      globals: globals.browser 
+      globals: {
+        ...globals.browser,
+        ...globals.node, // Adding Node.js global variables
+        ...globals.jest  // Adding Jest global variables
+      }
     },
+    
     rules: {
-      '@stylistic/js/indent': [
-        'error',
-        2
-      ],
       '@stylistic/js/linebreak-style': [
         'error',
         'unix'
       ],
-      '@stylistic/js/quotes': [
-        'error',
-        'single'
-      ],
-      '@stylistic/js/semi': [
-        'error',
-        'always'
-      ],
       'eqeqeq': 'error',
-      'no-trailing-spaces': 'error',
       'object-curly-spacing': [
         'error', 'always'
       ],
-      'arrow-spacing': [
-        'error', { 'before': true, 'after': true },
-      ],
       'no-console': 'off',
+      "arrow-spacing": ["error", { "before": true, "after": true }],
     },
   },
   pluginJs.configs.recommended
