@@ -28,7 +28,14 @@ jobs:
       # Run Tests
       - name: Run Tests
         env:
-          TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}  # Add necessary test environment variables
+          TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }} 
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+          SECRET: ${{ secrets.SECRET }}
+          SEARCH_API_KEY: ${{ secrets.SEARCH_API_KEY }}
+          PORT: ${{ secrets.PORT }}
         run: npm run test
         working-directory: ./server  # Adjust to your test command and directory
 
