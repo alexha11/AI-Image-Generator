@@ -95,6 +95,25 @@ Table:
 | **Total** | | **129** |
 
 
+Additional Table: 
+
+| Date (Month.Day.Year) | Task | Labour (hours) |
+| --- | --- | --- |
+| 09.13.2024 | Add functions (post, get requests, show paswword, middleware ..) for login and register form 6 and add UI for login and register form 3 | 9 |
+| 09.14.2024 | Add services change from using fetch to axios, fix some requests for dalle, post, user 1hr | 1 |
+| 09.15.2024 | Add user exactor and add logic handling requests | 3 |
+| 09.17.2024 | Add saving post created by user 5 | 5 |
+| 09.18.2024 | changed the logic of saving lovedPosts and ccreatedPosts which helps to optimize the running -> only need to get the user once time to get all information instead of saving in posts - 3 | 3 |
+| 10.24.2024 | fix and implement ci cd | 2 |
+| 10.25.2024 | add unlove and love function 5hrs | 5 |
+| 10.26.2024 | created two devlopment and production stage, unify the json for user 3hrs | 3 |
+| 10.28.2024 | add one search image engine 7hrs | 7 |
+| 10.29.2024 | avoid wasting resource in cloudinary, fix size to 256 x 256, improve ui 2hrs | 2 |
+| 11.3.2024 | add static test 1hrs | 1 |
+| 11.4.2024 | add check token for search and generate engine and fix logic 2 | 2 |
+| 11.5.2024 | fix minor 2hr | 2 |
+| 11.8.2024 | add tests to ci/cd 3hr | 3 |
+| **Total** | | **48** |
 ## References
 
 Learning from this tutorial [youtube video](https://youtu.be/EyIvuigqDoA?si=NH10NSRkPWe-41lh)

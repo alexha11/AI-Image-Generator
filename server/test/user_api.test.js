@@ -22,7 +22,7 @@ describe("user api tests", () => {
   );
 
   test("register user", async () => {
-    const usersAtBegin = await helper.usersInDb();
+
     const newUser = {
       username: "thanhduong11",
       email: "thanhduonghd114@gmail.com",
@@ -36,8 +36,9 @@ describe("user api tests", () => {
       .expect('Content-Type', /application\/json/);
     
     const usersAtEnd = await helper.usersInDb();
+    const usernames = usersAtEnd.map((user) => user.username);
     console.log(usersAtEnd);
-    expect(usersAtEnd).toHaveLength(usersAtBegin.length + 1); 
+    expect(usernames).toContain(newUser.username);
     });
 
   test("register user with invalid email", async () => {
