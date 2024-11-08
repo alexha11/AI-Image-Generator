@@ -21,16 +21,15 @@ jobs:
         run: npm install
         working-directory: ./server  # Change if your package.json is in a different directory
 
-      # Run ESLint for static code analysis
       - name: Run ESLint
-        run: npx eslint . --ext .js,.jsx --max-warnings=0  # Adjust extensions if needed
+        run: npm run lint
         working-directory: ./server
 
       # Run Tests
       - name: Run Tests
         env:
           TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}  # Add necessary test environment variables
-        run: npm test
+        run: npm run test
         working-directory: ./server  # Adjust to your test command and directory
 
       - name: Login to Docker Hub
