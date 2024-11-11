@@ -57,6 +57,8 @@ test("fail create a new post", async () => {
     user: "672df5088ff8d59ed91c92eb"
   };
 
+  console.log('token ' + loginToken)
+
   await api
     .post("/api/v1/post")
     .set("Authorization", `Bearer ${loginToken}`)

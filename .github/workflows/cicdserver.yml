@@ -52,6 +52,17 @@ jobs:
     needs: build
     runs-on: self-hosted
     steps: 
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Clean up Docker
+        run: |
+          docker container prune -f
+          docker image prune -f
+          docker volume prune -f
+
       - name: Pull Image from Docker Hub
         run: docker pull duongha11/serveraigenerator:latest
 
