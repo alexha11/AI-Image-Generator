@@ -1,9 +1,18 @@
-# AI Image Generator
-
 ## Description
 
 A Dall-E Clone with search image function
-  
+
+## Live Deployment
+Deploy on AWS EC2 (recommended): 
+
+Live Demo: [AI Image Generator website](http://16.16.204.216:3000/) 
+
+Deploy on render: 
+
+Live demo:  [AI Image Generator website](https://ai-image-generator-1-1t4p.onrender.com/) 
+
+The server is deployed [AI Image Generator Server](https://ai-image-generator-f5m8.onrender.com).
+
 ## Technologies 
 
 Front End:
@@ -27,17 +36,6 @@ CI/CD:
 
 Test:
 - Jest
-
-## Live Deployment
-Deploy on AWS EC2 (recommend with more powerful server): 
-
-Live Demo: [AI Image Generator website](http://16.16.204.216:3000/) 
-
-Deploy on render: 
-
-Live demo:  [AI Image Generator website](https://ai-image-generator-1-1t4p.onrender.com/) 
-
-The server is deployed [AI Image Generator Server](https://ai-image-generator-f5m8.onrender.com).
 
 ## NOTE
 
@@ -122,5 +120,19 @@ Additional Table:
 | 11.8.2024 | add tests to ci/cd 3hr | 3 |
 | **Total** | | **48** |
 ## References
+
+## CI/CD Pipeline
+<img width="1347" alt="Screenshot 2024-11-12 at 18 24 02" src="https://github.com/user-attachments/assets/1236db0f-7fdd-4bb0-8c7a-8dd94857c176">
+
+## Demo Image 
+
+<img width="1429" alt="Screenshot 2024-11-12 at 18 37 02" src="https://github.com/user-attachments/assets/a4ee624b-d0a3-4d82-9c7b-bef7c92090aa">
+
+<img width="1435" alt="Screenshot 2024-11-12 at 18 37 31" src="https://github.com/user-attachments/assets/dd66c2c2-9cf0-447c-b075-cdc59ca04e57">
+
+<img width="1440" alt="Screenshot 2024-11-12 at 18 38 07" src="https://github.com/user-attachments/assets/59e0fc10-7309-4eb8-894c-12862ab5ed51">
+
+<img width="1440" alt="Screenshot 2024-11-12 at 18 37 56" src="https://github.com/user-attachments/assets/97d4eb70-10d9-4d69-b224-2df381a3cfed">
+
 
 Learning from this tutorial [youtube video](https://youtu.be/EyIvuigqDoA?si=NH10NSRkPWe-41lh)
