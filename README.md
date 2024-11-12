@@ -2,10 +2,7 @@
 
 ## Description
 
-An application has two main functions, each serving a specific page:
-
-- Create Post Page: Allows users to generate images based on their prompts and share them with the community.
-- Main Page: Allows users to search for, view, react to, and download images from the community.
+A Dall-E Clone with search image function
   
 ## Technologies 
 
@@ -16,28 +13,35 @@ Front End:
 Back End: 
 - Node.js
 - Express
-- OpenAI's DALL-E model
+- Dall-e API
+- Image Search API
 
-Database 
+Database:
 - MongoDB
 - Cloudinary
 
+CI/CD:
+- GitHub Actions
+- AWS EC2
+- Docker
+
+Test:
+- Jest
+
 ## Live Deployment
+Deploy on AWS EC2 (recommend with more powerful server): 
+
+Live Demo: [AI Image Generator website](http://16.16.204.216:3000/) 
+
+Deploy on render: 
 
 Live demo:  [AI Image Generator website](https://ai-image-generator-1-1t4p.onrender.com/) 
 
 The server is deployed [AI Image Generator Server](https://ai-image-generator-f5m8.onrender.com).
 
-Image Demo: 
-
-<img width="1413" alt="Screenshot 2024-08-24 at 16 54 05" src="https://github.com/user-attachments/assets/7ec4083c-9c16-46c5-89b4-a16fe2fe3c5a">
-<img width="1422" alt="Screenshot 2024-08-24 at 16 53 38" src="https://github.com/user-attachments/assets/62082290-004a-4137-b5bf-56b591bf0632">
-
-
 ## NOTE
 
 - The live demo may get a bit slow since it is a free plan
-- Users can generate images up to 5 times. Only an admin with the password can reset this limit. Can be found at the bottom of the Creat Post page. (Prevent DDOS attack)
 
 ## Run Locally
 
@@ -46,12 +50,15 @@ Image Demo:
 
 ```bash
 MONGODB_URL=<your_mongodb_url>
+TEST_MONGODB_URI=<your_test_mongodb_url>
 OPENAI_API_KEY=<your_api_key>
 PORT=8080
 
 CLOUDINARY_CLOUD_NAME=<user_name_from_cloudinary>
 CLOUDINARY_API_KEY=<api_key_from_cloudinary>
 CLOUDINARY_API_SECRET=<api_key_secret_from_cloudinary>
+SEARCH_API_KEY=<api_key_secret_from_rapid_api>
+SECRET=<your_random_code_to_use_jwt>
 
 ```
 
