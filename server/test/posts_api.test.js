@@ -7,121 +7,97 @@ import User from "../mongodb/models/user.js";
 import helper from "./helper.js";
 
 const api = supertest(app);
-
-var loginToken = "";
-
-beforeEach(async () => {
-  await User.deleteMany({})
-  await User.insertMany(helper.initialUsers)
-})
+let loginToken = "";
 
 beforeEach(async () => {
-  await Post.deleteMany({})
-  await Post.insertMany(helper.initialPosts)
-  
-  // const res = await api
-  //     .post('/api/login')
-  //     .send({
-  //         username: 'thanhduongTest',
-  //         password: 'abcd123456'
-  //     })
-  // token = res.body.token 
-})
+  await User.deleteMany({});
+  await api
+    .post("/api/v1/user/register")
+    .send(helper.initialUsers[0])
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+});
+
+beforeEach(async () => {
+  await Post.deleteMany({});
+  await Post.insertMany(helper.initialPosts);
+});
 
 beforeEach(async () => {
   const response = await api
-      .post('/api/v1/user/login')
-      .send({
-          username: 'thanhduonghd1214@gmail.com',
-          password: 'testing12345'
-      })
+    .post("/api/v1/user/login")
+    .send({
+      email: "thanhduonghd1214@gmail.com",
+      password: "abcd12345",
+    });
 
-  loginToken = response.body.token
-  console.log('this one is the one u are looking for duong ' + response.body.username)
+  loginToken = response.body.token;
+});
 
-})
+test("posts are returned as json and fail due to unauthorized access", async () => {
+  await api.get("/api/v1/post").expect(401).expect("Content-Type", /application\/json/);
+});
 
-test('posts are returned as json and failed due to unauthorized', async () => {
-  console.log('this one is the one u are looking for' + loginToken)
-  await api
-      .get('/api/v1/post')
-      .expect(401)
-      .expect('Content-Type', /application\/json/)
-})
-
-test("fail create a new post", async () => {
+test("create successfully a new post", async () => {
   const newPost = {
     name: "Sample Post",
     prompt: "This is a test prompt",
-    photo: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgCAYAAACAGCw...==", // A sample base64 image string
-    user: "672df5088ff8d59ed91c92eb"
+    photo: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/3FXwfkAAAAASUVORK5CYII=",
   };
-
-  console.log('token ' + loginToken)
 
   await api
     .post("/api/v1/post")
     .set("Authorization", `Bearer ${loginToken}`)
     .send(newPost)
-    .expect(500);
+    .expect(201);
 
   const postsAtEnd = await helper.postsInDb();
-  expect(postsAtEnd).toHaveLength(1);
+  expect(postsAtEnd).toHaveLength(helper.initialPosts.length + 1);
 });
 
-// test("fails to create a post with missing fields", async () => {
-//   const newPost = {
-//     name: "Incomplete Post",
-//   };
+test("attempt to create a post without authorization fails", async () => {
+  const newPost = {
+    name: "Unauthorized Post",
+    prompt: "This should fail",
+    photo: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/3FXwfkAAAAASUVORK5CYII=",
+  };
 
-//   await api
-//     .post("/api/v1/post")
-//     .set("Authorization", `Bearer ${token}`)
-//     .send(newPost)
-//     .expect(400);
-// });
+  await api
+    .post("/api/v1/post")
+    .send(newPost)
+    .expect(401); // Unauthorized
+});
 
-// test("delete an existing post", async () => {
-//   const postToDelete = await helper.createPost({
-//     name: "Deletable Post",
-//     prompt: "Post to delete",
-//     photo: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgCAYAAACAGCw...",
-//     user: user.body.id
-//   });
-
-//   await api
-//     .delete(`/api/v1/post/${postToDelete.id}`)
-//     .set("Authorization", `Bearer ${token}`)
-//     .expect(200);
-
-//   const postsAtEnd = await helper.postsInDb();
-//   expect(postsAtEnd).toHaveLength(0);
-// });
-
-
-
-// describe("post api tests", () => {
+test("toggle love on a post", async () => {
+  const postsAtStart = await helper.postsInDb();
   
-//   let user;
-//   let token;
+  expect(postsAtStart).toHaveLength(helper.initialPosts.length);
+  
+  const postToLove = postsAtStart[0];
 
-//   beforeAll(async () => {
-//     await User.deleteMany({});
-//     await Post.deleteMany({});
+  const postID = postToLove._id.toString();
+  
+  expect(postID).toBeDefined();
 
-//     await 
+  await api
+    .post(`/api/v1/post/${postID}/love`)
+    .set("Authorization", `Bearer ${loginToken}`)
+    .expect(200);
 
-//     user = await api.post("/api/v1/user/login").send(
-//       new 
-//     )
+  const updatedPost = await Post.findById(postID);
+  expect(updatedPost.love).toBe(postToLove.love + 1);
 
-//   });
+  // Then "unlove" the post
+  await api
+    .post(`/api/v1/post/${postID}/love`)
+    .set("Authorization", `Bearer ${loginToken}`)
+    .expect(200);
 
-//   afterAll(() => {
-//     mongoose.connection.close();
-//   });
+  const postAfterUnlove = await Post.findById(postID);
+  expect(postAfterUnlove.love).toBe(postToLove.love); // Back to original
+});
 
 
 afterAll(async () => {
-    await mongoose.connection.close()
+  await mongoose.connection.close();
 });

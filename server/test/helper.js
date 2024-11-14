@@ -15,7 +15,7 @@ const initialUsers = [
   {
     username: "thanhduong",
     email: "thanhduonghd1214@gmail.com",
-    password: "testing12345",
+    password: "abcd12345",
   },
 ];
 

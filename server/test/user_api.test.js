@@ -26,7 +26,7 @@ describe("user api tests", () => {
     const newUser = {
       username: "thanhduong11",
       email: "thanhduonghd114@gmail.com",
-      password: "testing12345", 
+      password: "abcd12345", 
     };
   
     await api
@@ -53,6 +53,29 @@ describe("user api tests", () => {
         .expect(400);
 
     });
+
+    test("update user count with invalid data, and expect count to be default", async () => {
+      const newUser = {
+        username: "thanhduong11",
+        email: "thanhduonghd114@gmail.com",
+        password: "abcd12345",
+      };
+  
+      const createdUser = await api.post("/api/v1/user/register").send(newUser).expect(201);
+  
+      const userId = createdUser.body.data._id;
+  
+      await api
+        .put(`/api/v1/user/${userId}`)
+        .send({ count: -1 }) 
+        .expect(400);
+  
+      const updatedUser = await User.findById(userId);
+
+
+      expect(updatedUser.count).toBe(0); 
+    });
+    
     
 
   });
