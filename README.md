@@ -119,12 +119,11 @@ Additional Table:
 | 11.5.2024 | fix minor 2hr | 2 |
 | 11.8.2024 | add tests to ci/cd 3hr | 3 |
 | **Total** | | **48** |
-## References
 
 ## CI/CD Pipeline
 <img width="1347" alt="Screenshot 2024-11-12 at 18 24 02" src="https://github.com/user-attachments/assets/1236db0f-7fdd-4bb0-8c7a-8dd94857c176">
 
-## Demo Image 
+## Image Demo 
 
 <img width="1429" alt="Screenshot 2024-11-12 at 18 37 02" src="https://github.com/user-attachments/assets/a4ee624b-d0a3-4d82-9c7b-bef7c92090aa">
 
@@ -134,5 +133,9 @@ Additional Table:
 
 <img width="1440" alt="Screenshot 2024-11-12 at 18 37 56" src="https://github.com/user-attachments/assets/97d4eb70-10d9-4d69-b224-2df381a3cfed">
 
+## Video Demo
 
+https://ooo.mmhmm.app/watch/z_eRqLDnT6pNlNK1YIHrgP
+
+## References
 Learning from this tutorial [youtube video](https://youtu.be/EyIvuigqDoA?si=NH10NSRkPWe-41lh)
