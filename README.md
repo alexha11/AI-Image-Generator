@@ -3,10 +3,6 @@
 A Dall-E Clone with search image function
 
 ## Live Deployment
-Deploy on AWS EC2 (recommended): 
-
-Live Demo: [AI Image Generator website](http://16.16.204.216:3000/) 
-
 Deploy on render: 
 
 Live demo:  [AI Image Generator website](https://ai-image-generator-1-1t4p.onrender.com/) 
