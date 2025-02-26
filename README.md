@@ -129,9 +129,7 @@ Additional Table:
 
 <img width="1440" alt="Screenshot 2024-11-12 at 18 37 56" src="https://github.com/user-attachments/assets/97d4eb70-10d9-4d69-b224-2df381a3cfed">
 
-## Video Demo
 
-https://ooo.mmhmm.app/watch/z_eRqLDnT6pNlNK1YIHrgP
 
 ## References
 Learning from this tutorial [youtube video](https://youtu.be/EyIvuigqDoA?si=NH10NSRkPWe-41lh)
